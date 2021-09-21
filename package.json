@@ -1,0 +1,19 @@
+{
+  "name": "sa",
+  "version": "1.0.0",
+  "description": "\"# CU-Crash\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2110521-2564-1-SW-ARCH/CU-Crash.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2110521-2564-1-SW-ARCH/CU-Crash/issues"
+  },
+  "homepage": "https://github.com/2110521-2564-1-SW-ARCH/CU-Crash#readme"
+}
