@@ -3,9 +3,9 @@
 Run these code to set up!
 
 ```
-py -3 -m venv .venv
-.venv\scripts\activate
-pip install -r requirements.txt
+pip install poetry
+poetry install
+cd app
 uvicorn main:app --reload
 ```
 
