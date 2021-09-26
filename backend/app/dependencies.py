@@ -8,16 +8,15 @@ from fastapi.openapi.utils import get_openapi
 from starlette.status import HTTP_403_FORBIDDEN
 from starlette.responses import RedirectResponse, JSONResponse
 
+from config import config
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-API_KEY = "CU-crash1234"
-API_KEY_NAME = "access_token"
-COOKIE_DOMAIN = "localtest.me"
 
-api_key_query = APIKeyQuery(name=API_KEY_NAME, auto_error=False)
-api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
-api_key_cookie = APIKeyCookie(name=API_KEY_NAME, auto_error=False)
+api_key_query = APIKeyQuery(name=config.API_KEY['name'], auto_error=False)
+api_key_header = APIKeyHeader(name=config.API_KEY['name'], auto_error=False)
+api_key_cookie = APIKeyCookie(name=config.API_KEY['name'], auto_error=False)
 
 
 async def get_api_key(
@@ -26,11 +25,11 @@ async def get_api_key(
     api_key_cookie: str = Security(api_key_cookie),
 ):
 
-    if api_key_query == API_KEY:
+    if api_key_query == config.API_KEY['key']:
         return api_key_query
-    elif api_key_header == API_KEY:
+    elif api_key_header == config.API_KEY['key']:
         return api_key_header
-    elif api_key_cookie == API_KEY:
+    elif api_key_cookie == config.API_KEY['key']:
         return api_key_cookie
     else:
         raise HTTPException(

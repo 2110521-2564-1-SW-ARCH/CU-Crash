@@ -8,6 +8,7 @@ authors = ["Jobjobsss <chayapoi-p@hotmail.com>"]
 python = "^3.8"
 fastapi = "^0.68.1"
 SQLAlchemy = "^1.4.25"
+mysqlclient = "^2.0.3"
 
 [tool.poetry.dev-dependencies]
 

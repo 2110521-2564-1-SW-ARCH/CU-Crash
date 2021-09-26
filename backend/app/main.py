@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 
 import dependencies
 from endpoint import user
+from config import config
 
 
 app = FastAPI(
@@ -15,4 +16,5 @@ app.include_router(user_router)
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello World",
+            'sql_config': repr(config)}
