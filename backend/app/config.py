@@ -1,6 +1,30 @@
 from pydantic import BaseSettings, Field
 from functools import lru_cache
 
+log_config = {
+    "version":1,
+    "disable_existing_loggers": False,
+    "root":{
+        "handlers" : ["console"],
+        "level": "DEBUG"
+    },
+    "handlers":{
+        "console":{
+            "formatter": "std_out",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        }
+    },
+    "formatters":{
+        "std_out": {
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": "%(levelprefix)s : %(asctime)s : %(module)s : %(funcName)s : %(lineno)d \n^MSG-->%(message)s",
+            "datefmt":"%d-%m-%Y %I:%M:%S"
+        }
+    },
+}
+
+
 class SQL_CONFIG(BaseSettings):
     host: str
     port: int
@@ -27,4 +51,4 @@ class Config():
     API_KEY = API_KEY_CONFIG().dict()
 
 
-config = lru_cache()(Config)()
+CONFIG = lru_cache()(Config)()

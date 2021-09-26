@@ -1,8 +1,11 @@
-import model
 from fastapi import APIRouter, Depends
-from service.db import sql_connection
 
+import model
+from service.db import sql_connection
+import logging
 import dependencies
+
+logger = logging.getLogger()
 
 router = APIRouter(
     prefix="/user",
@@ -19,4 +22,5 @@ async def create(user: model.User.UserCreate):
 
 @router.post("/login")
 async def login(email: str, password: str):
+    logger.info("Test Login")
     return {email, password}
