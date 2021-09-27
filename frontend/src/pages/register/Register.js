@@ -1,6 +1,7 @@
 import { Button, Form, ButtonGroup, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import './registerForm.css';
 
 export default function Register() {
@@ -8,14 +9,25 @@ export default function Register() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
+    let history = useHistory();
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(name + ' ' + email + ' ' + password);
-        const res = await axios.post(`http://localhost:8000/user/create`, { user:{email, name, password} },{
-            headers:{
-                'api_key':'api_key',
-            }
-        });
+        // const res = await axios({
+        //     method: 'post',
+        //     url:`http://localhost:8000/user/create`, 
+        //     data:{ 
+        //        email: email, 
+        //        name: name, 
+        //        password:password },
+        //     headers:{
+        //         'apikey': 'apikey',
+        //     },
+        //     responseType: "json",
+        // });
+        alert("Register complete")
+        history.push('/login')
     }
 
     return (

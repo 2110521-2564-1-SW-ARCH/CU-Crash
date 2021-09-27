@@ -6,7 +6,6 @@ import urllib
 
 import logging
 
-
 from config import CONFIG
 
 logger = logging.getLogger()

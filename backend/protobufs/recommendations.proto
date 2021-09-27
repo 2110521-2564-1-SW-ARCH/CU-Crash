@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+enum ReviewCategory {
+    SAHA = 0;
+    SCIENCE = 1;
+    SOCIAL = 2;
+    HUMAN = 3;
+}
+
+message RecommendationRequest {
+    int32 user_id = 1;
+    ReviewCategory category = 2;
+    int32 max_results = 3;
+}
+
+message ReviewRecommendation {
+    int32 id = 1;
+    string category = 2;
+    string subject = 3;
+    string body = 4;
+    string author = 5;
+    string created_at = 6;
+}
+
+message RecommendationResponse {
+    repeated ReviewRecommendation recommendations = 1;
+}
+
+service Recommendations {
+    rpc Recommend (RecommendationRequest) returns (RecommendationResponse);
+}
+

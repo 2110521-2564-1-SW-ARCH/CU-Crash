@@ -10,6 +10,13 @@ poetry install
 uvicorn app.main:app --reload
 ```
 
+gRPC start server
+```
+cd backend
+cd .\recomendations\
+python .\recommendation.py
+```
+
 swagger!
 
 ```
