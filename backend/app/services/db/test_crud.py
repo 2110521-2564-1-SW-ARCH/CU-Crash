@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
-
-from . import dummy_models as models, dummy_schemas as schemas
-
 import bcrypt
+import logging
+
+import models, schemas
+
+logger = logging.getLogger()
 
 def get_user(db: Session, user_id: int):
 
@@ -20,8 +22,9 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    passwd = bytes(user.password, encoding='utf-8')
-    db_user = models.User(email=user.email, hashed_password=passwd)
+    logger.info(f"Creating user to DB: {user}")
+    passwd = bcrypt.hashpw(user.password.encode('utf8'), bcrypt.gensalt())
+    db_user = models.User(**user.dict(exclude={'password'}), hashed_password=passwd)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -33,9 +36,9 @@ def get_items(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Item).offset(skip).limit(limit).all()
 
 
-def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
+'''def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db_item = models.Item(**item.dict(), owner_id=user_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    return db_item
+    return db_item'''

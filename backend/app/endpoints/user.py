@@ -1,14 +1,18 @@
-from backend.app.dependencies import jwt_token
 from fastapi import APIRouter, Depends, HTTPException
-from service.db import test_crud as crud, dummy_models as models, dummy_schemas as schemas
 from sqlalchemy.orm import Session
-
-from service.db.sql_connection import SessionLocal, engine
 import logging
-import dependencies
 import bcrypt
 
-models.Base.metadata.create_all(bind=engine)
+from services.db.sql_connection import SessionLocal, engine
+from services.db import test_crud as crud
+import models
+import schemas
+from services.db.sql_connection import Base
+from dependencies import jwt_token
+import dependencies
+
+
+Base.metadata.create_all(bind=engine)
 
 logger = logging.getLogger()
 
@@ -30,20 +34,24 @@ def get_db():
 
 @router.post("/create")
 async def create(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    logger.info(f'Get creating User: {user}')
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
+        logger.info(f'email {user.email} is already in use.')
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db, user)
 
 
 @router.post("/login")
 async def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
-    logger.info("Test Login")
+    logger.info(f"User Login: {user}")
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        passwd = bytes(user.password, encoding='utf-8')
-        matched = bcrypt.checkpw(passwd, db_user.hashed_password)
+        passwd = user.password.encode('utf8')
+        hashed_password = db_user.hashed_password.encode('utf8')
+        matched = bcrypt.checkpw(passwd, hashed_password)
+        logger.info(f"User Login success: {matched}")
         if matched:
-            access_token = jwt_token(db_user)
+            access_token = jwt_token(schemas.User(**db_user.__dict__).dict())
             return {"access_token": access_token}
     raise HTTPException(status_code=401, detail="Incorrect email or password")

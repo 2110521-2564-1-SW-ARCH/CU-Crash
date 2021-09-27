@@ -1,9 +1,7 @@
-from backend.app.service.db.dummy_models import User
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Security, HTTPException
 from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader
-from service.db import dummy_schemas as schemas
 from starlette.status import HTTP_403_FORBIDDEN
 
 from config import CONFIG

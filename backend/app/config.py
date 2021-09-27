@@ -18,7 +18,7 @@ log_config = {
     "formatters":{
         "std_out": {
             "()": "uvicorn.logging.DefaultFormatter",
-            "fmt": "%(levelprefix)s : %(asctime)s : %(module)s : %(funcName)s : %(lineno)d \n^MSG-->%(message)s",
+            "fmt": "%(levelprefix)s | %(asctime)s | module: %(module)s | func: %(funcName)s | line: %(lineno)d \n ^ MSG --> %(message)s",
             "datefmt":"%d-%m-%Y %I:%M:%S"
         }
     },
