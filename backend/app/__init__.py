@@ -1,1 +1,0 @@
-from scripts import start_app
