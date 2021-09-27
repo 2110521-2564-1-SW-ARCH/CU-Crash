@@ -46,9 +46,19 @@ class API_KEY_CONFIG(BaseSettings):
         env_file = ".env"
 
 
+class TOKEN_CONFIG(BaseSettings):
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+    
+    class Config:
+        env_file = ".env"
+        env_prefix = 'token_'
+
 class Config():
     SQL = SQL_CONFIG().dict()
     API_KEY = API_KEY_CONFIG().dict()
+    TOKEN = TOKEN_CONFIG().dict()
 
 
 CONFIG = lru_cache()(Config)()
