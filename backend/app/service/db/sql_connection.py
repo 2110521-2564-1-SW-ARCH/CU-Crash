@@ -18,12 +18,6 @@ params = urllib.parse.quote_plus(
 )
 SQLALCHEMY_DATABASE_URL = 'mssql+pyodbc:///?odbc_connect={}'.format(params)
 
-# ? connection for AWS
-'''SQLALCHEMY_DATABASE_URL = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(
-    config.SQL['user'], config.SQL['password'],
-    config.SQL['host'], config.SQL['db_name']
-)'''
-
 
 logger.info('begin connecting ...')
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
