@@ -9,26 +9,21 @@ import logging
 
 from config import CONFIG
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 # urllib.parse.quote_plus for python 3
 # ? connection for azure
 params = urllib.parse.quote_plus(
-    r'Driver={ODBC Driver 17 for SQL Server};Server=tcp:cu-crash.database.windows.net,1433;Database=CU-Crash;Uid=CUAdmin;Pwd=CU-crash1234;Encrypt=yes;TrustServerCertificate=no;'
+    r'Driver={ODBC Driver 17 for SQL Server};'+
+    'Server=tcp:{},{};Database={};Uid={};Pwd={};Encrypt=yes;TrustServerCertificate=no;'.format(
+        CONFIG.SQL['host'], CONFIG.SQL['port'], CONFIG.SQL['db_name'], CONFIG.SQL['user'], CONFIG.SQL['password']
+    )
 )
 SQLALCHEMY_DATABASE_URL = 'mssql+pyodbc:///?odbc_connect={}'.format(params)
-
-# ? connection for AWS
-'''SQLALCHEMY_DATABASE_URL = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(
-    config.SQL['user'], config.SQL['password'],
-    config.SQL['host'], config.SQL['db_name']
-)'''
 
 
 logger.info('begin connecting ...')
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-logger.info(engine.table_names())
 
 Base = declarative_base()

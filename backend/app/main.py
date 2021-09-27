@@ -4,7 +4,7 @@ from logging.config import dictConfig
 import logging
 
 import dependencies
-from endpoint import user
+from endpoints import user
 from config import CONFIG, log_config
 
 dictConfig(log_config)
@@ -18,7 +18,6 @@ app = FastAPI(
 user_router = user.router
 app.include_router(user_router)
 
-logger.info('test logging')
 
 @app.get("/")
 async def root():

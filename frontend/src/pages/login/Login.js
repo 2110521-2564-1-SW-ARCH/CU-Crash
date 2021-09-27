@@ -10,7 +10,11 @@ export default function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(email + ' ' + password);
-        //const res = await axios.post(` backend link `,{email,password});
+        const res = await axios.post(`http://localhost:8000/user/login`, { user:{email, password} },{
+            headers:{
+                'api_key':'api_key',
+            }
+        });
     }
 
     return (

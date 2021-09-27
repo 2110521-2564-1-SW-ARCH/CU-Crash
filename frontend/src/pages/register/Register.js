@@ -11,7 +11,11 @@ export default function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(name + ' ' + email + ' ' + password);
-        //const res = await axios.post(`https://localhost:8000/user/create`, { email, name, password });
+        const res = await axios.post(`http://localhost:8000/user/create`, { user:{email, name, password} },{
+            headers:{
+                'api_key':'api_key',
+            }
+        });
     }
 
     return (
@@ -68,7 +72,7 @@ export default function Register() {
                             <Button
                                 variant="primary"
                                 type="submit"
-                                href="/login"
+                                // href="/login"
                             >
                                 Register
                             </Button>

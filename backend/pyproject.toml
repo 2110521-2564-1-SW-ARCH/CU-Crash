@@ -9,11 +9,9 @@ python = "^3.8"
 fastapi = "^0.68.1"
 SQLAlchemy = "^1.4.25"
 mysqlclient = "^2.0.3"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 [tool.poetry.dev-dependencies]
-
-[tool.poetry.scripts]
-start = "app.scripts:start_app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
