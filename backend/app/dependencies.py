@@ -1,12 +1,14 @@
-from fastapi import  HTTPException
+from backend.app.service.db.dummy_models import User
+from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Security,HTTPException
+from fastapi import Security, HTTPException
 from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader
-
+from service.db import dummy_schemas as schemas
 from starlette.status import HTTP_403_FORBIDDEN
 
 from config import CONFIG
 
+import jwt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -32,3 +34,7 @@ async def get_api_key(
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials"
         )
+
+
+def jwt_token(data: dict):
+    return jwt.encode(data, "secret", algorithm="HS256")

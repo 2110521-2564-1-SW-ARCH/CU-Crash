@@ -12,26 +12,27 @@ class ItemCreate(ItemBase):
     pass
 
 
-
 class Item(ItemBase):
 
     id: int
     owner_id: int
-
 
     class Config:
 
         orm_mode = True
 
 
-
 class UserBase(BaseModel):
     email: str
+    password: str
+
+
+class UserLogin(UserBase):
+    pass
 
 
 class UserCreate(UserBase):
-    password: str
-
+    name: str
 
 
 class User(UserBase):
@@ -39,7 +40,6 @@ class User(UserBase):
     id: int
     is_active: bool
     items: List[Item] = []
-
 
     class Config:
 
