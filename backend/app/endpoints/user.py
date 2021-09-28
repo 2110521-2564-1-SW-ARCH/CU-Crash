@@ -3,16 +3,13 @@ from sqlalchemy.orm import Session
 import logging
 import bcrypt
 
-from services.db.sql_connection import SessionLocal, engine
+from services.db.sql_connection import get_db
 from services.db import test_crud as crud
 import models
 import schemas
-from services.db.sql_connection import Base
 from dependencies import jwt_token
 import dependencies
 
-
-Base.metadata.create_all(bind=engine)
 
 logger = logging.getLogger()
 
@@ -22,14 +19,6 @@ router = APIRouter(
     dependencies=[Depends(dependencies.get_api_key)],
     responses={404: {"description": "Not found"}},
 )
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/create")

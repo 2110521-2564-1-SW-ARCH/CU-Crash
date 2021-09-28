@@ -4,16 +4,14 @@ import grpc
 import logging
 from google.protobuf.json_format import MessageToDict
 
-from services.db.sql_connection import SessionLocal, engine
-from services.db.sql_connection import Base
+from services.db.sql_connection import engine
 import dependencies
+from models.review import ReviewCategory
+import models
 
-from recomendations.recommendations_pb2 import ReviewCategory, RecommendationRequest
+from recomendations.recommendations_pb2 import RecommendationRequest
 from recomendations.recommendations_pb2_grpc import RecommendationsStub
-from recomendations.recommendation import serve as start_server
 
-
-Base.metadata.create_all(bind=engine)
 
 logger = logging.getLogger()
 
@@ -32,10 +30,10 @@ recommendations_channel = grpc.insecure_channel(
 recommendations_client = RecommendationsStub(recommendations_channel)
 
 
-@router.get("/recommend")
-def get_recommened_reviews(user_id: int, category: str, max_results: int):
+@router.get("/recommend/")
+def get_recommened_reviews(user_id: int, category: ReviewCategory, max_results: int):
     recommendations_request = RecommendationRequest(
-        user_id=user_id, category=ReviewCategory.SAHA, max_results=max_results
+        user_id=1, category=category._name_, max_results=max_results
     )
     recommendations_response = recommendations_client.Recommend(
         recommendations_request

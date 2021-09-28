@@ -23,7 +23,7 @@ export default function ForgotPassword() {
         //     responseType: "json",
         // });
         // console.log(res.data.access_token)
-        alert("Send mail complete")
+        alert("Send email complete")
         history.push('/login')
         
     }
@@ -31,7 +31,7 @@ export default function ForgotPassword() {
     return (
         <Form onSubmit={handleSubmit}>
             <Container>
-                <Row className="justify-content-md-center mt-3">
+                <Row className="justify-content-md-center">
                     <Col md="auto">
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <h1 class="font-weight-bold">
@@ -43,7 +43,7 @@ export default function ForgotPassword() {
                 </Row>
 
 
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center mt-3">
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control

@@ -14,26 +14,25 @@ export default function Register() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(name + ' ' + email + ' ' + password);
-        // const res = await axios({
-        //     method: 'post',
-        //     url:`http://localhost:8000/user/create`, 
-        //     data:{ 
-        //        email: email, 
-        //        name: name, 
-        //        password:password },
-        //     headers:{
-        //         'apikey': 'apikey',
-        //     },
-        //     responseType: "json",
-        // });
-        alert("Register complete")
+        const res = await axios({
+            method: 'post',
+            url:`http://localhost:8000/user/create`, 
+            data:{ 
+               email: email, 
+               name: name, 
+               password:password },
+            headers:{
+                'apikey': 'apikey',
+            },
+            responseType: "json",
+        });
         history.push('/login')
     }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Container>
-                <Row className="justify-content-md-center mt-3">
+                <Row className="justify-content-md-center">
                     <Col md="auto">
                         <Form.Group className="mb-3 md-5" controlId="formBasicEmail">
                             <h1 class="font-weight-bold">

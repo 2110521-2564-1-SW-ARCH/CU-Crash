@@ -1,51 +1,49 @@
-import { Button, Form, ButtonGroup, Container, Row, Col } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import './loginForm.css';
 // import PropTypes from 'prop-types';
 
-
-export default function Login() {
+//{setToken}
+export default function Login({setToken}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     let history = useHistory();
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(email + ' ' + password);
-        // const res = await axios({
-        //     method: 'post',
-        //     url:`http://localhost:8000/user/login`, 
-        //     data:{ 
-        //        email: email, 
-        //        password: password },
-        //     headers:{
-        //         'apikey': 'apikey',
-        //     },
-        //     responseType: "json",
-        // });
+        const res = await axios({
+            method: 'post',
+            url:`http://localhost:8000/user/login`, 
+            data:{ 
+               email: email, 
+               password: password },
+            headers:{
+                'apikey': 'apikey',
+            },
+            responseType: "json",
+        });
         history.push('/home')
         // console.log(res.status)
-        // setToken(res.data.access_token)
-        // console.log(res.data.access_token)
+        setToken(res.data.access_token)
+        console.log(res.data.access_token)
     }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Container>
-                <Row className="justify-content-md-center mt-3">
+                <Row className="justify-content-md-center">
                     <Col md="auto">
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <h1 class="font-weight-bold">
-                                Login
-                            </h1>
-                        </Form.Group>
+                        <h1 class="font-weight-bold">
+                            CU-CRASH
+                        </h1>
                     </Col>
 
                 </Row>
 
 
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center mt-3">
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
@@ -80,10 +78,13 @@ export default function Login() {
                             Register
                         </Button>
                     </Col>
-                    <Col md="auto">
-                        <Button variant="primary" size="lg" href="/forgot">
+                </Row>
+
+                <Row className="justify-content-md-center mt-3">
+                <Col md="auto">
+                        <a variant="primary" size="lg" href="/forgot">
                             Forgot Password
-                        </Button>
+                        </a>
                     </Col>
                 </Row>
             </Container>

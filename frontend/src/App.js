@@ -7,17 +7,18 @@ import Review from './pages/review/Review';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import React, { useState } from 'react';
 
-// function setToken(userToken) {
-//     sessionStorage.setItem('token', JSON.stringify(userToken));
-//   }
+function setToken(userToken) {
+    sessionStorage.setItem('token', JSON.stringify(userToken));
+  }
   
-// function getToken() {
-//     const tokenString = sessionStorage.getItem('token');
-//     const userToken = JSON.parse(tokenString);
-//     return userToken?.token
-//   }
+function getToken() {
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+  }
 
 export default function App() {
+    const token = getToken();
     // const [token, setToken] = useState();
     // if(!token){
     //     return <Login setToken={setToken} />
@@ -37,9 +38,14 @@ export default function App() {
                 </Route>
                 <Route path="/login">
                     <PageContainer>
-                        <Login />
+                        <Login setToken={setToken}/>
                     </PageContainer>
                 </Route>
+                {/* <Route path="/login">
+                    <PageContainer>
+                        <Login />
+                    </PageContainer>
+                </Route> */}
                 <Route path="/forgot">
                     <PageContainer>
                         <ForgotPassword />
