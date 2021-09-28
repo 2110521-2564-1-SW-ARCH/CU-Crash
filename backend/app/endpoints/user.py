@@ -3,12 +3,10 @@ from sqlalchemy.orm import Session
 import logging
 import bcrypt
 
-from services.db.sql_connection import get_db
-from services.db import test_crud as crud
-import models
-import schemas
-from dependencies import jwt_token
-import dependencies
+from app.services.db.sql_connection import get_db
+from app.services.db import test_crud as crud
+from app import models, schemas, dependencies
+from app.dependencies import jwt_token
 
 
 logger = logging.getLogger()

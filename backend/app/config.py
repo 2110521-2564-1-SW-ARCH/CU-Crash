@@ -33,7 +33,7 @@ class SQL_CONFIG(BaseSettings):
     password: str
 
     class Config:
-        env_file = ".env"
+        env_file = "app/.env"
         env_prefix = 'sql_'
 
 
@@ -43,7 +43,7 @@ class API_KEY_CONFIG(BaseSettings):
     cookie_domain: str
 
     class Config:
-        env_file = ".env"
+        env_file = "app/.env"
 
 
 class TOKEN_CONFIG(BaseSettings):
@@ -52,7 +52,7 @@ class TOKEN_CONFIG(BaseSettings):
     access_token_expire_minutes: int
     
     class Config:
-        env_file = ".env"
+        env_file = "app/.env"
         env_prefix = 'token_'
 
 class Config():

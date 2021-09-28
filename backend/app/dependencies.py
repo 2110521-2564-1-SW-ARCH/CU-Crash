@@ -8,9 +8,9 @@ from pydantic import BaseModel
 from typing import Optional
 import jwt
 
-from config import CONFIG
-import schemas
-from services.db import test_crud as crud
+from app.config import CONFIG
+from app import schemas
+from app.services.db import test_crud as crud
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

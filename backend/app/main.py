@@ -3,10 +3,11 @@ from fastapi.logger import logger
 from logging.config import dictConfig
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+import uvicorn 
 
-import dependencies
-from endpoints import user, review
-from config import CONFIG, log_config
+from app import dependencies
+from app.endpoints import user, review
+from app.config import CONFIG, log_config
 
 dictConfig(log_config)
 
@@ -45,3 +46,8 @@ async def root():
     logger.info('test logging')
     return {"message": "Hello World",
             'sql_config': repr(CONFIG)}
+
+
+def start():
+    """Launched with `poetry run start` at root level"""
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

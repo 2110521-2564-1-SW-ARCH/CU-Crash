@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 import bcrypt
 import logging
 
-import models, schemas
+from app import models, schemas
 
 logger = logging.getLogger()
 

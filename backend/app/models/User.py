@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 
-from services.db.sql_connection import Base
+from app.services.db.sql_connection import Base
 
 
 class User(Base):

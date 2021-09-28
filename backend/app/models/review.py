@@ -3,7 +3,7 @@ from enum import Enum as PyEnum
 from sqlalchemy import Column, DateTime, Integer, String, Enum
 from sqlalchemy.sql import func
 
-from services.db.sql_connection import Base, get_db
+from app.services.db.sql_connection import Base, get_db
 
 
 class ReviewCategory(PyEnum):

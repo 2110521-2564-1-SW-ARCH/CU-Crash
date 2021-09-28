@@ -4,10 +4,9 @@ import grpc
 import logging
 from google.protobuf.json_format import MessageToDict
 
-from services.db.sql_connection import engine
-import dependencies
-from models.review import ReviewCategory
-import models
+from app.services.db.sql_connection import engine
+from app import dependencies, models
+from app.models.review import ReviewCategory
 
 from recomendations.recommendations_pb2 import RecommendationRequest
 from recomendations.recommendations_pb2_grpc import RecommendationsStub

@@ -5,11 +5,9 @@ Run these code to set up!
 ```
 cd backend
 pip install poetry
-pip3 install mysql-connector-python
 poetry shell
 poetry install
-cd app
-uvicorn main:app --reload
+poetry run start
 ```
 
 gRPC start server

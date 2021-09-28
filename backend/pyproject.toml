@@ -1,19 +1,28 @@
 [tool.poetry]
 name = "CU-CRASH"
 version = "0.1.0"
-description = "backend usin python fastapi for cu-crash project in soft arch 2021"
+description = "backend using python fastapi for cu-crash project in soft arch 2021"
 authors = ["Jobjobsss <chayapoi-p@hotmail.com>"]
+packages = [
+    { include = "app" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = "^0.68.1"
+fastapi = {extras = ["all"], version = "^0.68.1"}
 SQLAlchemy = "^1.4.25"
 mysqlclient = "^2.0.3"
 grpcio = "^1.40.0"
 grpcio-tools = "^1.40.0"
+PyJWT = "^2.1.0"
+bcrypt = "^3.2.0"
+pyodbc = "^4.0.32"
 
 [tool.poetry.dev-dependencies]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "app.main:start"
