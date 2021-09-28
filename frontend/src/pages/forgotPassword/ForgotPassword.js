@@ -1,12 +1,10 @@
 import { Button, Form, ButtonGroup, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
-import { useHistory } from "react-router-dom";
 import axios from 'axios';
-import './loginForm.css';
-// import PropTypes from 'prop-types';
+// import './loginForm.css';
+import { useHistory } from "react-router-dom";
 
-
-export default function Login() {
+export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     let history = useHistory();
@@ -15,7 +13,7 @@ export default function Login() {
         console.log(email + ' ' + password);
         // const res = await axios({
         //     method: 'post',
-        //     url:`http://localhost:8000/user/login`, 
+        //     url:`http://localhost:8000/user/forgot`, 
         //     data:{ 
         //        email: email, 
         //        password: password },
@@ -24,10 +22,10 @@ export default function Login() {
         //     },
         //     responseType: "json",
         // });
-        history.push('/home')
-        // console.log(res.status)
-        // setToken(res.data.access_token)
         // console.log(res.data.access_token)
+        alert("Send mail complete")
+        history.push('/login')
+        
     }
 
     return (
@@ -37,7 +35,7 @@ export default function Login() {
                     <Col md="auto">
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <h1 class="font-weight-bold">
-                                Login
+                                Forgot Password
                             </h1>
                         </Form.Group>
                     </Col>
@@ -57,32 +55,10 @@ export default function Login() {
                     </Form.Group>
                 </Row>
 
-                <Row className="justify-content-md-center">
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </Form.Group>
-                </Row>
-
                 <Row className="justify-content-md-center mt-3">
                     <Col md="auto">
                         <Button variant="primary" size="lg" type="submit">
-                            Login
-                        </Button>
-                    </Col>
-                    <Col md="auto">
-                        <Button variant="primary" size="lg" href="/register">
-                            Register
-                        </Button>
-                    </Col>
-                    <Col md="auto">
-                        <Button variant="primary" size="lg" href="/forgot">
-                            Forgot Password
+                            Send
                         </Button>
                     </Col>
                 </Row>
@@ -90,7 +66,3 @@ export default function Login() {
         </Form>
     );
 }
-
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-//   }

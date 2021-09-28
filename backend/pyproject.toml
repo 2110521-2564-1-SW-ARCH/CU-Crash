@@ -9,7 +9,8 @@ python = "^3.8"
 fastapi = "^0.68.1"
 SQLAlchemy = "^1.4.25"
 mysqlclient = "^2.0.3"
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+grpcio = "^1.40.0"
+grpcio-tools = "^1.40.0"
 
 [tool.poetry.dev-dependencies]
 
