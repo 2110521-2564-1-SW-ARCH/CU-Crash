@@ -1,15 +1,16 @@
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Container } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import styles from "./review.css";
-import React from 'react';
+import React from "react";
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import Select from 'react-select'
-
+import axios from "axios";
+import Select from "react-select";
+// const { env } = require("../../env");
 export default function Review() {
-  const [Reviews,setReviews] = useState([]);
+  const [Reviews, setReviews] = useState([]);
   let history = useHistory();
-  const [value, setValue] = React.useState('saha');
+  const [value, setValue] = React.useState("saha");
+  const [show, setShow] = useState(false);
   // const Reviews = [
   //   {
   //     id: "001",
@@ -46,86 +47,60 @@ export default function Review() {
   // ];
 
   const options = [
-    { value: 'saha', label: 'Saha' },
-    { value: 'social', label: 'Social' },
-    { value: 'science', label: 'Science' },
-    { value: 'human', label: 'Human' }
-  ]
-  useEffect(async ()=>{
-      const res = await axios({
-          method: 'get',
-          url:`http://localhost:8000/reviews/recommend/`,
-          params: {
-            'user_id': 1,
-            'category': value,
-            'max_results': 3,
-          },
-          headers:{
-              'apikey': 'apikey',
-          },
-          responseType: "json",
-      });
+    { value: "saha", label: "Saha" },
+    { value: "social", label: "Social" },
+    { value: "science", label: "Science" },
+    { value: "human", label: "Human" },
+  ];
+  const tokenString = sessionStorage.getItem("token");
+  const userToken = JSON.parse(tokenString);
+  useEffect(async () => {
+    const res = await axios({
+      method: "get",
+      url: `http://localhost:5567/reviews/recommend/`,
+      params: {
+        user_id: 1,
+        category: value,
+        max_results: 3,
+      },
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      responseType: "json",
+    });
 
-      console.log(res.data.recommendations)
-      setReviews(res.data.recommendations)
-
-  },[value]);
+    console.log(res.data.recommendations);
+    setReviews(res.data.recommendations);
+  }, [value]);
 
   function handleChange(e) {
     e.preventDefault();
-    sessionStorage.clear()
-    history.push('/login')
+    sessionStorage.clear();
+    history.push("/login");
     // alert('Log out complete')
-    console.log('log out')
-}
+    console.log("log out");
+  }
 
   return (
     <div className="container">
-      <h3 className="p-3 text-center">Recommended Reviews</h3>
-      {/* <p>{value}</p> */}
-      <select
-      value={value}
-      onChange={e => setValue(e.currentTarget.value)}
-      className="mt-1"
-      >
-      {options.map(item => (
-        <option
-          key={item.value}
-          value={item.value}
-        >
-          {item.label}
-        </option>
-      ))}
-    </select>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Body</th>
-            <th>Author</th>
-            <th>Create</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Reviews &&
-            Reviews.map((review) => (
-              <tr key={review.id}>
-                <td>{review.subject}</td>
-                <td>{review.body}</td>
-                <td>{review.author}</td>
-                <td>{review.createdAt}</td>
-                <td>{review.category}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      <Row className="justify-content-md-center mt-3">
+      <Row className="justify-content-md-center mt-5">
         <Col md="auto">
-          <Button variant="primary" size="lg" type="submit" onClick={handleChange}>
-            Log out
-          </Button>
+          <a href="/reviews/subjects">Subject reviews</a>
         </Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <Col md="auto">Subjects reviews are blah blah blah</Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <a href="/reviews/instructors">Instructor reviews</a>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <Col md="auto">Instructors reviews are blah blah blah</Col>
       </Row>
     </div>
   );

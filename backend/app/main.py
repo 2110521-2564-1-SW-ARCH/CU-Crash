@@ -3,7 +3,7 @@ from fastapi.logger import logger
 from logging.config import dictConfig
 from fastapi.middleware.cors import CORSMiddleware
 import logging
-import uvicorn 
+import uvicorn
 
 from app import dependencies
 from app.endpoints import user, review
@@ -16,7 +16,7 @@ logger = logging.getLogger()
 logger.info("FastAPI initializing.")
 
 app = FastAPI(
-    dependencies=[Depends(dependencies.get_api_key)],
+    # dependencies=[Depends(dependencies.get_api_key)],
     responses={404: {"description": "Not found"}},
 )
 
@@ -50,4 +50,4 @@ async def root():
 
 def start():
     """Launched with `poetry run start` at root level"""
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=5567, reload=True)

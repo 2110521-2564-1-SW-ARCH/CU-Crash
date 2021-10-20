@@ -13,6 +13,7 @@ poetry run start
 gRPC start server
 ```
 cd backend
+cd app
 cd .\recomendations\
 python .\recommendation.py
 ```

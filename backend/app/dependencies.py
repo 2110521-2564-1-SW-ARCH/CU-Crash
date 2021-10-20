@@ -1,19 +1,21 @@
 from datetime import datetime, timedelta
 
 from fastapi import Depends, HTTPException, Security, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
 from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader
 from starlette.status import HTTP_403_FORBIDDEN
 from pydantic import BaseModel
 from typing import Optional
 import jwt
 
+from app.services.db.sql_connection import get_db
 from app.config import CONFIG
 from app import schemas
 from app.services.db import test_crud as crud
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login", auto_error=False)
 
 
 api_key_query = APIKeyQuery(name=CONFIG.API_KEY['name'], auto_error=False)
@@ -55,37 +57,39 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, CONFIG.TOKEN['secret_key'], algorithm=CONFIG.TOKEN['algorithm'])
+    encoded_jwt = jwt.encode(
+        to_encode, CONFIG.TOKEN['secret_key'], algorithm=CONFIG.TOKEN['algorithm'])
     return encoded_jwt
 
 
 def jwt_token(data: dict):
-    access_token_expires = timedelta(minutes=CONFIG.TOKEN['access_token_expire_minutes'])
+    access_token_expires = timedelta(
+        minutes=CONFIG.TOKEN['access_token_expire_minutes'])
     access_token = create_access_token(
         data=data, expires_delta=access_token_expires
     )
     return access_token
 
 
-async def get_current_user(db, token: str = Depends(oauth2_scheme)):
+async def get_current_user(db: Session = Depends(get_db), token: str = Security(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     payload = jwt.decode(token, CONFIG.TOKEN['secret_key'],
-                            algorithms=[CONFIG.TOKEN['algorithm']])
+                         algorithms=[CONFIG.TOKEN['algorithm']])
     email: str = payload.get("email")
     if email is None:
         raise credentials_exception
     token_data = TokenData(username=email)
-    user = crud.get_user(db, username=token_data.username)
+    user = crud.get_user_by_email(db, email=token_data.username)
     if user is None:
         raise credentials_exception
     return user
 
 
 async def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
-    if current_user.disabled:
+    if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

@@ -5,6 +5,7 @@ import bcrypt
 
 from app.services.db.sql_connection import get_db
 from app.services.db import test_crud as crud
+from fastapi.security import OAuth2PasswordRequestForm
 from app import models, schemas, dependencies
 from app.dependencies import jwt_token
 
@@ -14,7 +15,7 @@ logger = logging.getLogger()
 router = APIRouter(
     prefix="/user",
     tags=["user"],
-    dependencies=[Depends(dependencies.get_api_key)],
+    # dependencies=[Depends(dependencies.get_api_key)],
     responses={404: {"description": "Not found"}},
 )
 
@@ -30,15 +31,21 @@ async def create(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login")
-async def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
+async def login(form_data: OAuth2PasswordRequestForm = Depends(),
+                db: Session = Depends(get_db)):
+    user = schemas.UserLogin(
+        email=form_data.username,
+        password=form_data.password
+    )
     logger.info(f"User Login: {user}")
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         passwd = user.password.encode('utf8')
         hashed_password = db_user.hashed_password.encode('utf8')
         matched = bcrypt.checkpw(passwd, hashed_password)
-        logger.info(f"User Login success: {matched}")
         if matched:
             access_token = jwt_token(schemas.User(**db_user.__dict__).dict())
+            logger.info(f"User Login success: {access_token}")
             return {"access_token": access_token}
+        logger.info(f"User Login failed.")
     raise HTTPException(status_code=401, detail="Incorrect email or password")
