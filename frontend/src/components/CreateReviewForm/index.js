@@ -1,5 +1,5 @@
 import React from "react";
- 
+
 const CreateReviewForm = props => {
   return (
     <div className="popup-box">
@@ -10,5 +10,5 @@ const CreateReviewForm = props => {
     </div>
   );
 };
- 
+
 export default CreateReviewForm;

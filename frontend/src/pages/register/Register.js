@@ -9,7 +9,6 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import "./registerForm.css";
 // const { env } = require('../../env');
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -40,7 +39,7 @@ export default function Register() {
   return (
     <Form onSubmit={handleSubmit}>
       <Container>
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-md-center mt-3">
           <Col md="auto">
             <Form.Group className="mb-3 md-5" controlId="formBasicEmail">
               <h1 class="font-weight-bold">Register</h1>
@@ -89,7 +88,8 @@ export default function Register() {
               <Button
                 variant="primary"
                 type="submit"
-                // href="/login"
+                size="lg"
+              // href="/login"
               >
                 Register
               </Button>

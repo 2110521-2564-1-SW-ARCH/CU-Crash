@@ -17,16 +17,17 @@ const CustomNavBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/home">Home</Nav.Link>
-            <NavDropdown title="Review" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/reviews/subjects">
-                Subjects
+            <NavDropdown title="Reviews" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/reviews/subject">
+                Subject
               </NavDropdown.Item>
-              <NavDropdown.Item href="/reviews/instructors">
-                Instructors
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/reviews/instructor">
+                Instructor
               </NavDropdown.Item>
-              {/* <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item> */}
             </NavDropdown>
+            <Nav.Link href="/supplementaries">Supplementaries</Nav.Link>
+            <Nav.Link href="/settings">Settings</Nav.Link>
             <Button variant="primary" type="submit">
               Log out
             </Button>

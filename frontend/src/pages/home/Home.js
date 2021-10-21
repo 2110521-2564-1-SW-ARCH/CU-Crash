@@ -1,57 +1,15 @@
-import { Button, Row, Col, Container } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import styles from "./review.css";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
 // const { env } = require("../../env");
-export default function Review() {
+export default function Home() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();
   const [value, setValue] = React.useState("saha");
   const [show, setShow] = useState(false);
-  // const Reviews = [
-  //   {
-  //     id: "001",
-  //     subject: "review1",
-  //     author: "author1",
-  //     body:"body1",
-  //     create: "01-02-2021",
-  //     category: "science",
-  //   },
-  //   {
-  //     id: "002",
-  //     subject: "review2",
-  //     author: "author2",
-  //     body:"body2",
-  //     create: "15-02-2021",
-  //     category: "social",
-  //   },
-  //   {
-  //     id: "003",
-  //     subject: "review3",
-  //     author: "author3",
-  //     body:"body3",
-  //     create: "21-02-2021",
-  //     category: "science",
-  //   },
-  //   {
-  //     id: "004",
-  //     subject: "review4",
-  //     author: "author4",
-  //     body:"body4",
-  //     create: "27-04-2021",
-  //     category: "social",
-  //   },
-  // ];
 
-  const options = [
-    { value: "saha", label: "Saha" },
-    { value: "social", label: "Social" },
-    { value: "science", label: "Science" },
-    { value: "human", label: "Human" },
-  ];
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
   useEffect(async () => {
@@ -84,23 +42,52 @@ export default function Review() {
   return (
     <div className="container">
       <Row className="justify-content-md-center mt-5">
-        <Col md="auto">
-          <a href="/reviews/subjects">Subject reviews</a>
-        </Col>
+        <Col md="auto">[IMG]</Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">What is CU-CRASH?</Col>
       </Row>
 
       <Row className="justify-content-md-center mt-3">
-        <Col md="auto">Subjects reviews are blah blah blah</Col>
+        <Col md="auto">
+          CU-CRASH is an SE3(?) project by Thira and friends,
+        </Col>
+      </Row>
+      <Row className="justify-content-md-center">
+        <Col md="auto">
+          which includes 3 main services as mentioned below.
+        </Col>
       </Row>
 
       <Row className="justify-content-md-center mt-5">
         <Col md="auto">
-          <a href="/reviews/instructors">Instructor reviews</a>
+          <a href="/reviews/subject">Subject Reviews</a>
         </Col>
       </Row>
 
       <Row className="justify-content-md-center mt-3">
-        <Col md="auto">Instructors reviews are blah blah blah</Col>
+        <Col md="auto">Subjects reviews is the blah blah blah</Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <a href="/reviews/instructor">Instructor Reviews</a>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <Col md="auto">Instructors reviews is the blah blah blah</Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <a href="/supplementaries">Supplementaries</a>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <Col md="auto">Google drive? let's gooooo</Col>
       </Row>
     </div>
   );

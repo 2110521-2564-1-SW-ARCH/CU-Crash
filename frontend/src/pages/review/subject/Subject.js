@@ -1,18 +1,9 @@
-import {
-  Button,
-  Row,
-  Col,
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-} from "react-bootstrap";
+import { Button, Row, Col, Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import styles from "./subject.css";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
+
 // const { env } = require("../../env");
 export default function Subject() {
   const [Reviews, setReviews] = useState([]);
@@ -88,75 +79,74 @@ export default function Subject() {
     console.log("log out");
   }
 
-  const CustomNavBar = () => {
-    return (
-      <Navbar bg="light" expand="lg">
-        <Container>
-          <Navbar.Brand href="/home">CU-CRASH</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/home">Home</Nav.Link>
-              <NavDropdown title="Review" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/reviews/subjects">
-                  Subjects
-                </NavDropdown.Item>
-                <NavDropdown.Item href="/reviews/instructors">
-                  Instructors
-                </NavDropdown.Item>
-                {/* <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item> */}
-              </NavDropdown>
-              <Nav.Link href="#/profile">Profie</Nav.Link>
-              <Button variant="primary" type="submit" onClick={handleChange}>
-                Log out
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    );
-  };
-
   return (
     <div className="container">
-      <h3 className="p-3 text-center">Subject Reviews</h3>
+      <Row className="justify-content-md-center mt-5">
+        <h3 className="p-3 text-center">Subject Reviews</h3>
+      </Row>
+
       {/* <p>{value}</p> */}
-      <select
-        value={value}
-        onChange={(e) => setValue(e.currentTarget.value)}
-        className="mt-1"
-      >
-        {options.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
-          </option>
-        ))}
-      </select>
-      <Button style={{ float: "right" }}>Create review</Button>
-      <table className="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Body</th>
-            <th>Author</th>
-            <th>Create</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Reviews &&
-            Reviews.map((review) => (
-              <tr key={review.id}>
-                <td>{review.subject}</td>
-                <td>{review.body}</td>
-                <td>{review.author}</td>
-                <td>{review.createdAt}</td>
-                <td>{review.category}</td>
-              </tr>
+
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <select
+            value={value}
+            onChange={(e) => setValue(e.currentTarget.value)}
+            className="mt-1"
+          >
+            {options.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
             ))}
-        </tbody>
-      </table>
+          </select>
+        </Col>
+
+        <Col md="auto">
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Control
+              placeholder="Search"
+            />
+          </Form.Group>
+        </Col>
+
+        <Col md="auto">
+          <Button>Search</Button>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <table className="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Review</th>
+              <th>Author</th>
+              <th>Create</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Reviews &&
+              Reviews.map((review) => (
+                <tr key={review.id}>
+                  <td>{review.subject}</td>
+                  <td>{review.body}</td>
+                  <td>{review.author}</td>
+                  <td>{review.createdAt}</td>
+                  <td>{review.category}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </Row>
+
+      <Row className="justify-content-md-center mt-3">
+        <Col md="auto">
+          <Button>Add review</Button>
+        </Col>
+      </Row>
+
       {/* <Row className="justify-content-md-center mt-3">
         <Col md="auto">
           <Button

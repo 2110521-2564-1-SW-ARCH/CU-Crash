@@ -34,7 +34,7 @@ export default function Login({ setToken }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Container>
-        <Row className="justify-content-md-center">
+        <Row className="justify-content-md-center mt-3">
           <Col md="auto">
             <h1 class="font-weight-bold">CU-CRASH</h1>
           </Col>

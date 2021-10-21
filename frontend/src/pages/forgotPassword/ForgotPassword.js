@@ -25,13 +25,13 @@ export default function ForgotPassword() {
         // console.log(res.data.access_token)
         alert("Send email complete")
         history.push('/login')
-        
+
     }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Container>
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center  mt-3">
                     <Col md="auto">
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <h1 class="font-weight-bold">
@@ -39,9 +39,7 @@ export default function ForgotPassword() {
                             </h1>
                         </Form.Group>
                     </Col>
-
                 </Row>
-
 
                 <Row className="justify-content-md-center mt-3">
                     <Form.Group className="mb-3" controlId="formBasicEmail">

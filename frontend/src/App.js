@@ -3,9 +3,11 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Review from "./pages/review/Review";
-import Subject from "./pages/subjectReview/Subject";
-import Instructors from "./pages/instructorReview/Instructor";
+import Home from "./pages/home/Home";
+import Subject from "./pages/review/subject/Subject";
+import Instructors from "./pages/review/instructor/Instructor";
+import Supplementary from "./pages/supplementary/Supplementary";
+import Setting from "./pages/setting/Setting";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import React, { useState } from "react";
 
@@ -35,17 +37,27 @@ export default function App() {
         </Route>
         <Route path="/home">
           <PageContainer>
-            <Review />
+            <Home />
           </PageContainer>
         </Route>
-        <Route path="/reviews/subjects">
+        <Route path="/reviews/subject">
           <PageContainer>
             <Subject />
           </PageContainer>
         </Route>
-        <Route path="/reviews/instructors">
+        <Route path="/reviews/instructor">
           <PageContainer>
             <Instructors />
+          </PageContainer>
+        </Route>
+        <Route path="/supplementaries">
+          <PageContainer>
+            <Supplementary />
+          </PageContainer>
+        </Route>
+        <Route path="/settings">
+          <PageContainer>
+            <Setting />
           </PageContainer>
         </Route>
         <Route path="/login">
