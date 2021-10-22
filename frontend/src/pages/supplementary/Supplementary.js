@@ -61,9 +61,7 @@ export default function Supplementary() {
 
         <Col md="auto">
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control
-              placeholder="Search"
-            />
+            <Form.Control placeholder="Search" />
           </Form.Group>
         </Col>
 

@@ -33,8 +33,8 @@ recommendations_client = RecommendationsStub(recommendations_channel)
 
 @router.get("/recommend/")
 def get_recommened_reviews(category: ReviewCategory, max_results: int,
-                           current_user: schemas.User = Depends(dependencies.get_current_active_user),
-                           db: Session = Depends(get_db)):
+                           current_user: schemas.User = Depends(
+                               dependencies.get_current_active_user)):
     recommendations_request = RecommendationRequest(
         user_id=1, category=category._name_, max_results=max_results
     )
@@ -46,9 +46,21 @@ def get_recommened_reviews(category: ReviewCategory, max_results: int,
     logger.info(type(message))
     return message
 
+
 @router.post("/create")
 async def create_review(review: schemas.ReviewCreate,
-                        current_user: schemas.User = Depends(dependencies.get_current_active_user),
+                        current_user: schemas.User = Depends(
+                            dependencies.get_current_active_user),
                         db: Session = Depends(get_db)):
-    review_services.create_reviews(db=db, review=review)
+    review_services.create_review(db=db, review=review)
     return review
+
+
+@router.get("/get_by_category")
+async def get_review_by_category(category: ReviewCategory,
+                                 current_user: schemas.User = Depends(
+                                     dependencies.get_current_active_user),
+                                 db: Session = Depends(get_db)):
+    logger.info(f'get reviews from category: {category._name_}')
+    reviews = review_services.get_review_by_category(db=db, category=category)
+    return reviews

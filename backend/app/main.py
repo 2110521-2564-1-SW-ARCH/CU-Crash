@@ -6,9 +6,10 @@ import logging
 import uvicorn
 
 from app import dependencies
-from app.services.db import Base, engine
-from app.endpoints import user, review
+from app.services.db import Base, engine, get_mongo
+from app.endpoints import user, review, supplementary
 from app.config import CONFIG, log_config
+from app.scripts import start_grpc_server
 
 dictConfig(log_config)
 
@@ -25,6 +26,7 @@ logger.info("FastAPI initialed.")
 
 app.include_router(user.router)
 app.include_router(review.router)
+app.include_router(supplementary.router)
 
 Base.metadata.create_all(bind=engine)
 
@@ -48,6 +50,13 @@ async def root():
     logger.info('test logging at root.')
     return {"message": "Hello World",
             'config': repr(CONFIG)}
+
+
+# @app.on_event("startup")
+# async def startup_event():
+#     mongo = Depends(get_mongo)
+    # sup = mongo.supplementary
+    # logger.info(sup.find()[0])
 
 
 def start():

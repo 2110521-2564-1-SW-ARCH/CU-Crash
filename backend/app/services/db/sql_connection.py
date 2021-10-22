@@ -13,7 +13,7 @@ logger = logging.getLogger()
 # urllib.parse.quote_plus for python 3
 # ? connection for azure
 params = urllib.parse.quote_plus(
-    r'Driver={ODBC Driver 17 for SQL Server};'+
+    r'Driver={ODBC Driver 17 for SQL Server};' +
     'Server=tcp:{},{};Database={};Uid={};Pwd={};Encrypt=yes;TrustServerCertificate=no;'.format(
         CONFIG.SQL['host'], CONFIG.SQL['port'], CONFIG.SQL['db_name'], CONFIG.SQL['user'], CONFIG.SQL['password']
     )
@@ -34,3 +34,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def get_manual_db():
+    return SessionLocal()

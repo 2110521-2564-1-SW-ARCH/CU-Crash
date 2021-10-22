@@ -28,10 +28,10 @@ const CustomNavBar = () => {
             </NavDropdown>
             <Nav.Link href="/supplementaries">Supplementaries</Nav.Link>
             <Nav.Link href="/settings">Settings</Nav.Link>
-            
-          </Nav><Button variant="primary" type="submit">
-              Log out
-            </Button>
+          </Nav>
+          <Button variant="primary" type="submit">
+            Log out
+          </Button>
         </Navbar.Collapse>
       </Container>
     </Navbar>
@@ -42,7 +42,7 @@ export default function PageContainer(props) {
   return (
     <>
       <CustomNavBar />
-      <Container className="mt-4" fluid="md" >
+      <Container style={{ color: "darkblue" }} className="mt-4" fluid="md">
         <Row>
           <Col>{props.children}</Col>
         </Row>

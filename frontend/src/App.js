@@ -28,65 +28,41 @@ export default function App() {
   //     return <Login setToken={setToken} />
   // }
   return (
-    <Router>
-      <Switch>
-        <Route path="/register">
-          <PageContainer>
+    <PageContainer>
+      <Router>
+        <Switch>
+          <Route path="/register">
             <Register />
-          </PageContainer>
-        </Route>
-        <Route path="/home">
-          <PageContainer>
+          </Route>
+          <Route path="/home">
             <Home />
-          </PageContainer>
-        </Route>
-        <Route path="/reviews/subject">
-          <PageContainer>
+          </Route>
+          <Route path="/reviews/subject">
             <Subject />
-          </PageContainer>
-        </Route>
-        <Route path="/reviews/instructor">
-          <PageContainer>
+          </Route>
+          <Route path="/reviews/instructor">
             <Instructors />
-          </PageContainer>
-        </Route>
-        <Route path="/supplementaries">
-          <PageContainer>
+          </Route>
+          <Route path="/supplementaries">
             <Supplementary />
-          </PageContainer>
-        </Route>
-        <Route path="/settings">
-          <PageContainer>
+          </Route>
+          <Route path="/settings">
             <Setting />
-          </PageContainer>
-        </Route>
-        <Route path="/login">
-          <PageContainer>
+          </Route>
+          <Route path="/login">
             <Login setToken={setToken} />
-          </PageContainer>
-        </Route>
-        {/* <Route path="/login">
-                    <PageContainer>
-                        <Login />
-                    </PageContainer>
-                </Route> */}
-        <Route path="/forgot">
-          <PageContainer>
+          </Route>
+          <Route path="/forgot">
             <ForgotPassword />
-          </PageContainer>
-        </Route>
-        <Route path="/dashboard">
-          <PageContainer>
+          </Route>
+          <Route path="/dashboard">
             <Dashboard />
-          </PageContainer>
-        </Route>
-
-        <Route path="/">
-          <PageContainer>
+          </Route>
+          <Route path="/">
             <Login setToken={setToken} />
-          </PageContainer>
-        </Route>
-      </Switch>
-    </Router>
+          </Route>
+        </Switch>
+      </Router>
+    </PageContainer>
   );
 }
