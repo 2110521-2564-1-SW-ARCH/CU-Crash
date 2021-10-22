@@ -2,16 +2,16 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
-    email: EmailStr
+    email: EmailStr = 'example@email.com'
 
 
 class UserLogin(UserBase):
-    password: str
+    password: str = 'pwd1234'
 
 
 class UserCreate(UserBase):
-    name: str
-    password: str
+    name: str = 'John Wicker'
+    password: str = 'pwd1234'
 
 
 class User(UserBase):

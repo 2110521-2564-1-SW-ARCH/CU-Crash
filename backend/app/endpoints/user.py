@@ -4,7 +4,7 @@ import logging
 import bcrypt
 
 from app.services.db.sql_connection import get_db
-from app.services.db import test_crud as crud
+from app.services.db import user as user_services
 from fastapi.security import OAuth2PasswordRequestForm
 from app import models, schemas, dependencies
 from app.dependencies import jwt_token
@@ -23,11 +23,11 @@ router = APIRouter(
 @router.post("/create")
 async def create(user: schemas.UserCreate, db: Session = Depends(get_db)):
     logger.info(f'Get creating User: {user}')
-    db_user = crud.get_user_by_email(db, email=user.email)
+    db_user = user_services.get_user_by_email(db, email=user.email)
     if db_user:
         logger.info(f'email {user.email} is already in use.')
         raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db, user)
+    return user_services.create_user(db, user)
 
 
 @router.post("/login")
@@ -38,7 +38,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
         password=form_data.password
     )
     logger.info(f"User Login: {user}")
-    db_user = crud.get_user_by_email(db, email=user.email)
+    db_user = user_services.get_user_by_email(db, email=user.email)
     if db_user:
         passwd = user.password.encode('utf8')
         hashed_password = db_user.hashed_password.encode('utf8')

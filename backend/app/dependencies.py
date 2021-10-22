@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
+import logging
 
 from fastapi import Depends, HTTPException, Security, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from fastapi.security.api_key import APIKeyQuery, APIKeyCookie, APIKeyHeader
-from starlette.status import HTTP_403_FORBIDDEN
 from pydantic import BaseModel
 from typing import Optional
 import jwt
@@ -12,8 +12,10 @@ import jwt
 from app.services.db.sql_connection import get_db
 from app.config import CONFIG
 from app import schemas
-from app.services.db import test_crud as crud
+from app.services.db import user as user_services
 
+
+logger = logging.getLogger()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login", auto_error=False)
 
@@ -46,7 +48,7 @@ async def get_api_key(
         return api_key_cookie
     else:
         raise HTTPException(
-            status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials"
         )
 
 
@@ -77,13 +79,20 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    payload = jwt.decode(token, CONFIG.TOKEN['secret_key'],
-                         algorithms=[CONFIG.TOKEN['algorithm']])
+    try:
+        payload = jwt.decode(token, CONFIG.TOKEN['secret_key'],
+                            algorithms=[CONFIG.TOKEN['algorithm']])
+    except jwt.exceptions.DecodeError:
+        logger.info('cannot get payload.')
+        raise credentials_exception
+    except jwt.exceptions.ExpiredSignatureError:
+        logger.info('token has expired.')
+        raise credentials_exception
     email: str = payload.get("email")
     if email is None:
         raise credentials_exception
     token_data = TokenData(username=email)
-    user = crud.get_user_by_email(db, email=token_data.username)
+    user = user_services.get_user_by_email(db, email=token_data.username)
     if user is None:
         raise credentials_exception
     return user
