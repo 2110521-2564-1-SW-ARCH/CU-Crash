@@ -10,7 +10,7 @@ import {
 
 const CustomNavBar = () => {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" fixed="top">
       <Container>
         <Navbar.Brand href="/home">CU-CRASH</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -28,10 +28,10 @@ const CustomNavBar = () => {
             </NavDropdown>
             <Nav.Link href="/supplementaries">Supplementaries</Nav.Link>
             <Nav.Link href="/settings">Settings</Nav.Link>
-            <Button variant="primary" type="submit">
+            
+          </Nav><Button variant="primary" type="submit">
               Log out
             </Button>
-          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
@@ -42,7 +42,7 @@ export default function PageContainer(props) {
   return (
     <>
       <CustomNavBar />
-      <Container fluid="md">
+      <Container className="mt-4" fluid="md" >
         <Row>
           <Col>{props.children}</Col>
         </Row>
