@@ -7,7 +7,4 @@ body {
     background-attachment: fixed;
     text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
     color: rgb(0, 0, 0);    
-    justify-content: center;
-    display: flex;
-    align-items: center;
 }
