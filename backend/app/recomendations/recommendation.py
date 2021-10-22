@@ -14,6 +14,8 @@ import recommendations_pb2_grpc
 
 from app.services.db.test_crud import get_user
 
+logger = logging.getLogger()
+
 reviews_by_category = {
     ReviewCategory.SAHA: [
         ReviewRecommendation(id=1, subject="WINE EDUCATION",
@@ -114,4 +116,5 @@ def serve():
 
 
 if __name__ == "__main__":
+    logger.info('running GRPC Server...')
     serve()

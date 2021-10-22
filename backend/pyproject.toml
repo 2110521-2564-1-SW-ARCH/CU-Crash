@@ -26,3 +26,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 start = "app.main:start"
+start_grpc = "app.scripts:start_grpc_server"
