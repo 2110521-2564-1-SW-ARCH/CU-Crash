@@ -42,9 +42,15 @@ export default function Supplementary() {
         <h3 className="p-3 text-center">Supplementaries</h3>
       </Row>
 
+      <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <h4 style={{ color: "red" }}> Warning : DO NOT SHARE </h4>
+        </Col>
+      </Row>
+
       {/* <p>{value}</p> */}
 
-      <Row className="justify-content-md-center mt-5">
+      <Row className="justify-content-md-center mt-3">
         <Col md="auto">
           <select
             value={value}
