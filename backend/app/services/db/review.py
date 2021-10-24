@@ -19,7 +19,7 @@ def get_review_by_subject(db: Session, subject: str, order_by=models.Review.upda
                                              order_by=order_by)
 
 
-def get_review_by_category(category: models.ReviewCategory, db: Session, order_by=models.Review.updated_at):
+def get_review_by_category(category: models.SubjectCategory, db: Session, order_by=models.Review.updated_at):
     return base.get_all_by_key_value_ordered(db=db, model=models.Review,
                                              key=models.Review.category, value=category,
                                              order_by=order_by)
@@ -31,8 +31,8 @@ def get_review_by_author(db: Session, author: str, order_by=models.Review.update
                                              order_by=order_by)
 
 
-def get_reviews(db: Session, limit: int = 100):
-    return base.get_all(db=db, model=models.Review, limit=limit)
+def get_reviews(db: Session, skip: int = 0, limit: int = 100):
+    return base.get_all(db=db, model=models.Review,skip=skip, limit=limit)
 
 
 def create_review(db: Session, review: schemas.ReviewCreate):
