@@ -1,7 +1,8 @@
-import { Button, Row, Col, Form } from "react-bootstrap";
+import { Button, Row, Col, Form, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import AddSupplementaryForm from "../../components/AddSupplementaryForm";
 import axios from "axios";
 
 export default function Supplementary() {
@@ -35,6 +36,16 @@ export default function Supplementary() {
     console.log(res.data.recommendations);
     setSupplementaries(res.data.recommendations);
   }, [value]);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const onCreateReviewFormSubmit = (e) => {
+    e.preventDefault();
+    handleClose();
+  };
 
   return (
     <div className="container">
@@ -104,9 +115,23 @@ export default function Supplementary() {
 
       <Row className="justify-content-md-center mt-3">
         <Col md="auto">
-          <Button>Add supplementary</Button>
+          <Button onClick={handleShow}>Add supplementary</Button>
         </Col>
       </Row>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add subject review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddSupplementaryForm onSubmit={onCreateReviewFormSubmit} />
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
     </div>
   );
 }

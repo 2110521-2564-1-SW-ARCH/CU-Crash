@@ -1,7 +1,8 @@
 import { Button, Row, Col, Form, Modal } from "react-bootstrap";
-import React, { useState, useEffect, useHistory } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
-import CreateForm from "../../../components/CreateForm";
+import AddReviewForm from "../../../components/AddReviewForm";
 
 require('dotenv').config();
 
@@ -152,7 +153,7 @@ export default function Instructor() {
           <Modal.Title>Add instructor review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateForm onSubmit={onCreateReviewFormSubmit} form="instructor"/>
+          <AddReviewForm onSubmit={onCreateReviewFormSubmit} form="instructor"/>
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

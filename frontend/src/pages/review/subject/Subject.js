@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import CreateForm from "../../../components/CreateForm";
+import AddReviewForm from "../../../components/AddReviewForm";
 
 // const { env } = require("../../env");
 export default function Subject() {
@@ -182,7 +182,7 @@ export default function Subject() {
           <Modal.Title>Add subject review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CreateForm onSubmit={onCreateReviewFormSubmit} />
+          <AddReviewForm onSubmit={onCreateReviewFormSubmit} />
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
