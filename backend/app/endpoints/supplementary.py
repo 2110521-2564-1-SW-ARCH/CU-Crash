@@ -21,9 +21,9 @@ google_conf = {
     ]
 }
 
-config = GoogleDriveConfig(**google_conf)
+# config = GoogleDriveConfig(**google_conf)
 
-gdrive = GoogleDrive(config)
+# gdrive = GoogleDrive(config)
 
 
 @router.get("/create_folder")

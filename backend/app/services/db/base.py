@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import Depends
-from sqlalchemy import desc
+from sqlalchemy import desc, asc
 import bcrypt
 import logging
 
@@ -23,9 +23,13 @@ def get_all_by_key_value_ordered(db: Session, model, key, value, order_by):
     return db.query(model).filter(key == value).order_by(desc(order_by)).all()
 
 
-def get_all(db: Session, model, skip: int = 0, limit: int = 100):
-    return db.query(model).offset(skip).limit(limit).all()
-
+def get_all(db: Session, model, skip: int = 0, limit: int = 100, order_by = None, desc = False):
+    if not order_by:
+        order_by = model.id
+    if desc:
+        return db.query(model).order_by(desc(order_by)).offset(skip).limit(limit).all()
+    else:
+        return db.query(model).order_by(asc(order_by)).offset(skip).limit(limit).all()
 
 def add_data(db: Session, model_data):
     db.add(model_data)
