@@ -19,9 +19,9 @@ class Subject(Base):
     __tablename__ = "subjects"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String(7), primary_key=True, index=True)
     short_name = Column(String(20), unique=True)
-    full_name = Column(String(100), unique=True)
+    full_name = Column(String(100,collation="Thai_CI_AS"), unique=True) #collation ภาษาไทย
     category = Column(Enum(SubjectCategory))
     is_exist = Column(Boolean, default=True)
     avg_rating = column_property(

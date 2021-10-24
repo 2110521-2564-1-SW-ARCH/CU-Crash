@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+message CreateSupplementaryRequest {
+    int32 owner_id = 1;
+    string url = 2;
+    string subject_id = 3;
+}
+
+message GetSupplementaryRequest {
+    string subject_id = 3;
+}
+
+message Supplementary {
+    int32 owner_id = 1;
+    string url = 2;
+    string subject_id = 3;
+}
+
+message GetSupplementaryResponse {
+    repeated Supplementary supplementarys = 1;
+}
+
+message CreateSupplementaryResponse {
+    string id = 1;
+    string url = 2;
+}
+
+service Supplementarys {
+    rpc CreateSupplementary (CreateSupplementaryRequest) returns (CreateSupplementaryResponse);
+    rpc GetSupplementary (GetSupplementaryRequest) returns (GetSupplementaryResponse);
+}

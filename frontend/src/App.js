@@ -11,8 +11,14 @@ import Setting from "./pages/setting/Setting";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import React, { useState } from "react";
 
+import "./App.css";
+
 function setToken(userToken) {
   sessionStorage.setItem("token", JSON.stringify(userToken));
+}
+
+function setProfile(user){
+  sessionStorage.setItem("user-info", JSON.stringify(user));
 }
 
 function getToken() {
@@ -50,16 +56,13 @@ export default function App() {
             <Setting />
           </Route>
           <Route path="/login">
-            <Login setToken={setToken} />
-          </Route>
-          <Route path="/forgot">
-            <ForgotPassword />
+            <Login setToken={setToken} setProfile={setProfile}/>
           </Route>
           <Route path="/dashboard">
             <Dashboard />
           </Route>
           <Route path="/">
-            <Login setToken={setToken} />
+            <Login setToken={setToken} setProfile={setProfile}/>
           </Route>
         </Switch>
       </Router>

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 import logging
 import bcrypt
 
@@ -26,3 +27,17 @@ async def create_subject(subject: schemas.SubjectCreate, db: Session = Depends(g
         logger.info(f'subject {subject} is already existed({subject_existed}).')
         raise HTTPException(status_code=400, detail=subject_existed)
     return subject_services.create_subject(db, subject)
+
+
+@router.get("/all")
+async def get_all_subject(db: Session = Depends(get_db)):
+    subjects = subject_services.get_subjects(db)
+    return subjects
+    pass
+
+
+@router.get("/all_with_reviews", response_model=List[schemas.SubjectWithReviews])
+async def get_all_subject(db: Session = Depends(get_db)):
+    subjects = subject_services.get_subjects(db)
+    return subjects
+    pass

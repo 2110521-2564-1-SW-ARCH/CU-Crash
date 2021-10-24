@@ -4,19 +4,19 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import AddReviewForm from "../../../components/AddReviewForm";
-
-require('dotenv').config();
+import { API_URL } from '../../../constants';
 
 export default function Subject() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();
-  const [value, setValue] = React.useState("saha");
+  const [value, setValue] = React.useState("");
   // const [sort, setSort] = React.useState("ascending");
+
   const mock_Reviews = [
     {
       id: "001",
       subject: "review1",
-      author: "author1",
+      author: "author1",  
       body: "body1",
       createdAt: "01-02-2021",
       category: "science",
@@ -48,6 +48,7 @@ export default function Subject() {
   ];
 
   const options = [
+    { value: "", label: "Not Select" },
     { value: "saha", label: "Saha" },
     { value: "social", label: "Social" },
     { value: "science", label: "Science" },
@@ -62,7 +63,7 @@ export default function Subject() {
   useEffect(async () => {
     // const res = await axios({
     //   method: "get",
-    //   url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
+    //   url: `${API_URL}/reviews/recommend/`,
     //   params: {
     //     user_id: 1,
     //     category: value,
@@ -84,7 +85,7 @@ export default function Subject() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const onCreateReviewFormSubmit = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
     handleClose();
   };
@@ -121,7 +122,7 @@ export default function Subject() {
         </Col>
 
         <Col md="auto">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" controlId="formBasicSearch">
             <Form.Control
               placeholder="Search"
             />
@@ -183,7 +184,7 @@ export default function Subject() {
           <Modal.Title>Add subject review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddReviewForm onSubmit={onCreateReviewFormSubmit} />
+          <AddReviewForm onSubmit={onFormSubmit} />
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

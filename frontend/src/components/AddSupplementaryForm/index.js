@@ -22,17 +22,17 @@ export default function AddReviewForm({ onSubmit, form }) {
         <Form onSubmit={onSubmit}>
 
             <Form.Group className="justify-content-md-center" controlId="ControlTextarea">
-                <Form.Label>Subject</Form.Label>
+                <Form.Label>Subject ID</Form.Label>
                 <Form.Control
                     type="textarea"
-                    placeholder="Subject"
+                    placeholder="Subject ID"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
             </Form.Group>
 
 
-            <Form.Group className="justify-content-md-center mt-3" controlId="exampleForm.ControlTextarea1">
+            {/* <Form.Group className="justify-content-md-center mt-3" controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Category</Form.Label>
                 <Form.Select
                     value={category}
@@ -46,14 +46,15 @@ export default function AddReviewForm({ onSubmit, form }) {
                         </option>
                     ))}
                 </Form.Select>
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
-                <Form.Label className="justify-content-md-center mt-3">Supplementary</Form.Label>
+                <Form.Label className="justify-content-md-center mt-3">Supplementary URL</Form.Label>
                 <Form.Control
                     as="textarea"
                     rows={3}
                     value={body}
+                    placeholder="ex. google drive URL"
                     onChange={(e) => setBody(e.target.value)}
                 />
             </Form.Group>

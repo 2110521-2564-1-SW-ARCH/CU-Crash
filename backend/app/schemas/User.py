@@ -18,7 +18,6 @@ class User(UserBase):
 
     id: int
     name: str
-    is_active: bool
 
     class Config:
 

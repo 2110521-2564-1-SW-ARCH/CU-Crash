@@ -25,8 +25,8 @@ def get_subject_by_category(category: models.SubjectCategory, db: Session, order
                                              order_by=order_by)
 
 
-def get_subjects(db: Session, limit: int = 100):
-    return base.get_all(db=db, model=models.Subject, limit=limit)
+def get_subjects(db: Session, skip: int = 0, limit: int = 100, order_by = None):
+    return base.get_all(db=db, model=models.Subject,skip=skip, limit=limit, order_by = order_by)
 
 
 def is_subject_exist(db: Session, subject: schemas.SubjectCreate):

@@ -7,98 +7,103 @@ import {
   Col,
 } from "react-bootstrap";
 import { useState } from "react";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
-
-require('dotenv').config();
+import { API_URL } from "../../constants";
+import axios from "axios";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-
   let history = useHistory();
+  const [registerData, setRegisterData] = useState({
+    email: "",
+    name: "",
+    password: "",
+  });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(name + " " + email + " " + password);
-    const res = await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}/user/create`,
-      data: {
-        email: email,
-        name: name,
-        password: password,
-      },
+  const handleSubmit = async () => {
+    const config = {
       headers: {
         apikey: "apikey",
       },
-      responseType: "json",
-    });
-    history.push("/login");
+    };
+    const res = await axios.post(
+      `${API_URL}/user/create`,
+      registerData,
+      config
+    );
+    if (res?.status == 200) {
+      console.log('Register Succesfully');
+      history.push("/login");
+      history.go(0);
+    } else {
+      console.log('Register Fail');
+    }
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Container>
-        <Row className="justify-content-md-center mt-3">
-          <Col md="auto">
-            <Form.Group className="mb-3 md-5" controlId="formBasicEmail">
-              <h1 class="font-weight-bold">Register</h1>
+    <>
+      <Form>
+        <Container>
+          <Row className="justify-content-md-center mt-3">
+            <Col md="auto">
+              <Form.Group className="mb-3 md-5">
+                <h1 className="font-weight-bold">Register</h1>
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row className="justify-content-md-center">
+            <Form.Group className="mb-3">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="textarea"
+                placeholder="Enter name"
+                value={registerData.name}
+                onChange={(e) =>
+                  setRegisterData({ ...registerData, name: e.target.value })
+                }
+              />
             </Form.Group>
-          </Col>
-        </Row>
+          </Row>
 
-        <Row className="justify-content-md-center">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="justify-content-md-center">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="justify-content-md-center">
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-        </Row>
-
-        <Row className="justify-content-md-center mt-3">
-          <Col md="auto">
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-              <Button
-                variant="primary"
-                type="submit"
-                size="lg"
-              // href="/login"
-              >
-                Register
-              </Button>
+          <Row className="justify-content-md-center">
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={registerData.email}
+                onChange={(e) =>
+                  setRegisterData({ ...registerData, email: e.target.value })
+                }
+              />
             </Form.Group>
-          </Col>
-        </Row>
-      </Container>
-    </Form>
+          </Row>
+
+          <Row className="justify-content-md-center">
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={registerData.password}
+                onChange={(e) =>
+                  setRegisterData({ ...registerData, password: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Row>
+        </Container>
+      </Form>
+    <Row className="justify-content-md-center mt-4">
+      <Button
+        variant="primary"
+        type="submit"
+        size="lg"
+        onClick={handleSubmit}
+      >
+        Register
+      </Button>
+      </Row>
+    </>
   );
 }

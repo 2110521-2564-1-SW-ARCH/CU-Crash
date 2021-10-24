@@ -45,7 +45,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
         matched = bcrypt.checkpw(passwd, hashed_password)
         if matched:
             access_token = jwt_token(schemas.User(**db_user.__dict__).dict())
-            logger.info(f"User Login success: {access_token}")
-            return {"access_token": access_token}
+            res = {"access_token": access_token,
+                    "user":{
+                    "user_id": db_user.id,
+                    "username": db_user.name,
+                    "email": db_user.email}}
+            logger.info(f"User Login success: {res}")
+            return res
         logger.info(f"User Login failed.")
     raise HTTPException(status_code=401, detail="Incorrect email or password")

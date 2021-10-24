@@ -4,7 +4,7 @@ import CustomNavbar from "./CustomNavbar";
 
 export default function PageContainer(props) {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/';
+  const showNavbar = ['/', '/login', '/register'].every((path) => location.pathname !== path)
 
   return (
     <>

@@ -3,8 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import AddReviewForm from "../../../components/AddReviewForm";
-
-require('dotenv').config();
+import { API_URL } from '../../../constants';
 
 export default function Instructor() {
   const [Reviews, setReviews] = useState([]);
@@ -31,7 +30,7 @@ export default function Instructor() {
   async function getRecommend() {
     const res = await axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
+      url: `${API_URL}/reviews/recommend/`,
       params: {
         user_id: 1,
         category: value,
@@ -60,7 +59,7 @@ export default function Instructor() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const onCreateReviewFormSubmit = (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
     handleClose();
   };
@@ -89,7 +88,7 @@ export default function Instructor() {
         </Col>
 
         <Col md="auto">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" controlId="formBasicSearch">
             <Form.Control
               placeholder="Search"
             />
@@ -153,7 +152,7 @@ export default function Instructor() {
           <Modal.Title>Add instructor review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddReviewForm onSubmit={onCreateReviewFormSubmit} form="instructor"/>
+          <AddReviewForm onSubmit={onFormSubmit} form="instructor"/>
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

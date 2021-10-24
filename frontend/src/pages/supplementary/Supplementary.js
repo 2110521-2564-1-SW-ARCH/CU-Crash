@@ -4,8 +4,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import AddSupplementaryForm from "../../components/AddSupplementaryForm";
 import axios from "axios";
-
-require('dotenv').config();
+import { API_URL } from '../../constants';
 
 export default function Supplementary() {
   const [Supplementaries, setSupplementaries] = useState([]);
@@ -23,7 +22,7 @@ export default function Supplementary() {
   useEffect(async () => {
     const res = await axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
+      url: `${API_URL}/reviews/recommend/`,
       params: {
         user_id: 1,
         category: value,

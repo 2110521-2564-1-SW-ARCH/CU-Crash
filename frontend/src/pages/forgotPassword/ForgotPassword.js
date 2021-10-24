@@ -1,7 +1,6 @@
 import { Button, Form, ButtonGroup, Container, Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import axios from 'axios';
-// import './loginForm.css';
 import { useHistory } from "react-router-dom";
 
 export default function ForgotPassword() {
@@ -34,7 +33,7 @@ export default function ForgotPassword() {
                 <Row className="justify-content-md-center  mt-3">
                     <Col md="auto">
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <h1 class="font-weight-bold">
+                            <h1 className="font-weight-bold">
                                 Forgot Password
                             </h1>
                         </Form.Group>

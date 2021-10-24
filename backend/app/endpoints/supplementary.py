@@ -1,10 +1,19 @@
 from fastapi import APIRouter, Depends
-from fastapi_cloud_drives import GoogleDrive
-from fastapi_cloud_drives import GoogleDriveConfig
+from pydantic import AnyUrl, constr
+import os
+import grpc
+from google.protobuf.json_format import MessageToDict
 
 import logging
 
+from app.supplementary.supplementary_pb2 import (
+    GetSupplementaryRequest,
+    CreateSupplementaryRequest
+)
+from app.supplementary.supplementary_pb2_grpc import SupplementarysStub
+
 from app.services.db import get_mongo
+from app import schemas, models, dependencies
 
 logger = logging.getLogger()
 
@@ -14,19 +23,37 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-google_conf = {
-    "CLIENT_ID_JSON": "app/client_id.json",
-    "SCOPES": [
-        "https://www.googleapis.com/auth/drive"
-    ]
-}
+grpc_host = os.getenv("GRPC_HOST", "localhost")
+supplementary_channel = grpc.insecure_channel(
+    f"{grpc_host}:50051"
+)
+supplementary_client = SupplementarysStub(supplementary_channel)
 
-# config = GoogleDriveConfig(**google_conf)
+@router.get("/subject")
+def get_subject_supplementarys(subject_id: constr(regex=r'[0-9]{7}'),
+                           current_user: schemas.User = Depends(
+                               dependencies.get_current_active_user)):
+    get_supplementary_request = GetSupplementaryRequest(
+        subject_id=subject_id
+    )
+    get_supplementary_response = supplementary_client.GetSupplementary(
+        get_supplementary_request
+    )
+    message = MessageToDict(get_supplementary_response)
+    logger.info(type(message))
+    return message
 
-# gdrive = GoogleDrive(config)
 
-
-@router.get("/create_folder")
-async def create_folder():
-    resp = await gdrive.create_folder(folder_name="Examples")
-    return {"message": "success"}
+@router.post("/create")
+def create_supplementary(subject_id: constr(regex=r'[0-9]{7}'),url: AnyUrl,
+                           current_user: schemas.User = Depends(
+                               dependencies.get_current_active_user)):
+    create_supplementary_request = CreateSupplementaryRequest(
+        subject_id=subject_id, owner_id=current_user.id, url=url
+    )
+    create_supplementary_response = supplementary_client.CreateSupplementary(
+        create_supplementary_request
+    )
+    message = MessageToDict(create_supplementary_response)
+    logger.info(type(message))
+    return message

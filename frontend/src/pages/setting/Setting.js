@@ -1,23 +1,25 @@
-import { Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import ChangePasswordForm from "../../components/changePasswordForm";
+import ChangeNameForm from "../../components/changeNameForm";
 import axios from "axios";
-
-require('dotenv').config();
+import { API_URL } from '../../constants';
 
 export default function Setting() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();
   const [value, setValue] = React.useState("saha");
   const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
 
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
   useEffect(async () => {
     const res = await axios({
       method: "get",
-      url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
+      url: `${API_URL}/reviews/recommend/`,
       params: {
         user_id: 1,
         category: value,
@@ -33,6 +35,22 @@ export default function Setting() {
     setReviews(res.data.recommendations);
   }, [value]);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const onChangePasswordFormSubmit = (e) => {
+    e.preventDefault();
+    handleClose();
+  };
+
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
+
+  const onChangeNameFormSubmit = (e) => {
+    e.preventDefault();
+    handleClose2();
+  };
+
   return (
     <div className="container">
       <Row className="justify-content-md-center mt-5">
@@ -41,20 +59,48 @@ export default function Setting() {
 
       <Row className="justify-content-md-center mt-5">
         <Col md="auto">
-          <Button variant="primary" size="lg" href="#/settings/profile">
+          <Button onClick={handleShow2} variant="primary" size="lg">
             {/* change name */}
             Update profile
           </Button>
         </Col>
       </Row>
 
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ChangeNameForm onSubmit={onChangeNameFormSubmit} />
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
+
       <Row className="justify-content-md-center mt-5">
         <Col md="auto">
-          <Button variant="primary" size="lg" href="#/settings/password">
+          <Button onClick={handleShow} variant="primary" size="lg">
             Change password
           </Button>
         </Col>
       </Row>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Change password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ChangePasswordForm onSubmit={onChangePasswordFormSubmit} />
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer> */}
+      </Modal>
     </div>
   );
 }
