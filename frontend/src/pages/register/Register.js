@@ -9,7 +9,9 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-// const { env } = require('../../env');
+
+require('dotenv').config();
+
 export default function Register() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");

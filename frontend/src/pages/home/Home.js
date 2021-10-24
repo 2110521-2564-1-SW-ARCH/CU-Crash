@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-// const { env } = require("../../env");
+
+require('dotenv').config();
+
 export default function Home() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();

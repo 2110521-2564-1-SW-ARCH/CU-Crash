@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import "./loginForm.css";
 
+require('dotenv').config();
+
 export default function Login({ setToken }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -4,6 +4,8 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
+require('dotenv').config();
+
 export default function Setting() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();

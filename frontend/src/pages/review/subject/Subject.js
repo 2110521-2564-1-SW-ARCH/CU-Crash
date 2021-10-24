@@ -5,7 +5,8 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import AddReviewForm from "../../../components/AddReviewForm";
 
-// const { env } = require("../../env");
+require('dotenv').config();
+
 export default function Subject() {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();

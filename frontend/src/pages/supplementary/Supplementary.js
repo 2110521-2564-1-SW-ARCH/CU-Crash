@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import AddSupplementaryForm from "../../components/AddSupplementaryForm";
 import axios from "axios";
 
+require('dotenv').config();
+
 export default function Supplementary() {
   const [Supplementaries, setSupplementaries] = useState([]);
   let history = useHistory();
