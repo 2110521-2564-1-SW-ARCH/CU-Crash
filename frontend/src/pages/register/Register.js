@@ -22,7 +22,7 @@ export default function Register() {
     console.log(name + " " + email + " " + password);
     const res = await axios({
       method: "post",
-      url: `http://localhost:5567/user/create`,
+      url: `${process.env.REACT_APP_API_URL}/user/create`,
       data: {
         email: email,
         name: name,

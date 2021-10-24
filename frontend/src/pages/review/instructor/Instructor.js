@@ -1,32 +1,36 @@
 import { Button, Row, Col, Form, Modal } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import React from "react";
-import { useHistory } from "react-router-dom";
-import CreateForm from "../../../components/CreateForm";
+import React, { useState, useEffect, useHistory } from "react";
 import axios from "axios";
+import CreateForm from "../../../components/CreateForm";
+
+require('dotenv').config();
 
 export default function Instructor() {
   const [Reviews, setReviews] = useState([]);
+  const [value, setValue] = useState("saha");
+  const [sort, setSort] = useState("ascending");
+  
   let history = useHistory();
-  const [value, setValue] = React.useState("saha");
-  // const [sort, setSort] = React.useState("ascending");
+
   const options = [
     { value: "saha", label: "Saha" },
     { value: "social", label: "Social" },
     { value: "science", label: "Science" },
     { value: "human", label: "Human" },
   ];
-  // const sorts = [
-  //   { value: "ascending", label: "Ascending" },
-  //   { value: "descending", label: "Descending" },
-  // ];
+
+  const sorts = [
+    { value: "ascending", label: "Ascending" },
+    { value: "descending", label: "Descending" },
+  ];
+
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
 
-  useEffect(async () => {
+  async function getRecommend() {
     const res = await axios({
       method: "get",
-      url: `http://localhost:5567/reviews/recommend/`,
+      url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
       params: {
         user_id: 1,
         category: value,
@@ -37,9 +41,17 @@ export default function Instructor() {
       },
       responseType: "json",
     });
+    return res
+  };
 
-    console.log(res.data.recommendations);
-    setReviews(res.data.recommendations);
+  useEffect(() => {
+    try {
+      const res = getRecommend();
+      setReviews(res.data.recommendations);
+      console.log(res.data.recommendations);
+    } catch (e) {
+      console.log(e)
+    }
   }, [value]);
 
   const [show, setShow] = useState(false);
@@ -51,6 +63,7 @@ export default function Instructor() {
     e.preventDefault();
     handleClose();
   };
+
   return (
     <div className="container">
       <Row className="justify-content-md-center mt-5">

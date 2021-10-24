@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(async () => {
     const res = await axios({
       method: "get",
-      url: `http://localhost:5567/reviews/recommend/`,
+      url: `${process.env.REACT_APP_API_URL}/reviews/recommend/`,
       params: {
         user_id: 1,
         category: value,

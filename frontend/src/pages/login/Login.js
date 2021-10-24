@@ -14,7 +14,7 @@ export default function Login({ setToken }) {
     console.log(email + " " + password);
     const res = await axios({
       method: "post",
-      url: `http://localhost:5567/user/login`,
+      url: `${process.env.REACT_APP_API_URL}/user/login`,
       data:
         // username: email,
         // password: password,
