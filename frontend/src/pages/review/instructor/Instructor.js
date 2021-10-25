@@ -2,17 +2,18 @@ import { Button, Row, Col, Form, Modal } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import AddReviewForm from "../../../components/AddReviewForm";
+import AddReviewForm from "../../../components/Forms/AddReviewForm";
 import { API_URL } from '../../../constants';
 
 export default function Instructor() {
   const [Reviews, setReviews] = useState([]);
-  const [value, setValue] = useState("saha");
+  const [value, setValue] = useState("all");
   const [sort, setSort] = useState("ascending");
   
   let history = useHistory();
 
   const options = [
+    { value: "all", label: "All" },
     { value: "saha", label: "Saha" },
     { value: "social", label: "Social" },
     { value: "science", label: "Science" },
@@ -114,6 +115,12 @@ export default function Instructor() {
         </Col> */}
       </Row>
 
+      <Row className="justify-content-md-center mt-1">
+        <Col md="auto">
+          <Button onClick={() => setShow(true)}>Add review</Button>
+        </Col>
+      </Row>
+
       <Row className="justify-content-md-center mt-3">
         <table className="table table-striped table-bordered">
           <thead>
@@ -142,11 +149,6 @@ export default function Instructor() {
         </table>
       </Row>
 
-      <Row className="justify-content-md-center mt-3">
-        <Col md="auto">
-          <Button onClick={handleShow}>Add review</Button>
-        </Col>
-      </Row>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Add instructor review</Modal.Title>

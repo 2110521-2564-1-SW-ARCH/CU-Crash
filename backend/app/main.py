@@ -7,7 +7,7 @@ import uvicorn
 
 from app import dependencies
 from app.services.db import Base, engine, get_mongo
-from app.endpoints import user, review, supplementary, subject
+from app.endpoints import user, review, supplementary, subject, instructor
 from app.config import CONFIG, log_config
 from app.scripts import start_grpc_server
 
@@ -28,6 +28,7 @@ app.include_router(user.router)
 app.include_router(review.router)
 app.include_router(supplementary.router)
 app.include_router(subject.router)
+app.include_router(instructor.router)
 
 Base.metadata.create_all(bind=engine)
 

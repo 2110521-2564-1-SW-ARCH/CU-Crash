@@ -81,13 +81,17 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
     )
     try:
         payload = jwt.decode(token, CONFIG.TOKEN['secret_key'],
-                            algorithms=[CONFIG.TOKEN['algorithm']])
+                             algorithms=[CONFIG.TOKEN['algorithm']])
     except jwt.exceptions.DecodeError:
         logger.info('cannot get payload.')
         raise credentials_exception
     except jwt.exceptions.ExpiredSignatureError:
         logger.info('token has expired.')
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="This Token is Expired.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     email: str = payload.get("email")
     if email is None:
         raise credentials_exception

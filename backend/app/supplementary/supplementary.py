@@ -12,11 +12,11 @@ from supplementary_pb2 import(
     CreateSupplementaryResponse,
     Supplementary
 )
+from app.config import CONFIG
 
 logger = logging.getLogger()
 
-client = MongoClient(
-    "mongodb+srv://cucrash:cucrash1234@cluster0.rtqnr.mongodb.net/cucrash?retryWrites=true&w=majority", tlsCAFile=certifi.where())
+client = MongoClient(CONFIG.MONGO['uri'], tlsCAFile=certifi.where())
 
 
 class SupplementarysServicer(supplementary_pb2_grpc.SupplementarysServicer):

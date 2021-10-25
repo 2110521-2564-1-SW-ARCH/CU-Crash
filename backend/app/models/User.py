@@ -15,4 +15,5 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
 
-    reviewing = relationship("Review", back_populates="author")
+    subject_reviewing = relationship("SubjectReview", back_populates="author")
+    instructor_reviewing = relationship("InstructorReview", back_populates="author")

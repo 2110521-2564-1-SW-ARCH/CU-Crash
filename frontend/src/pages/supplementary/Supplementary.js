@@ -4,29 +4,28 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import AddSupplementaryForm from "../../components/AddSupplementaryForm";
 import axios from "axios";
-import { API_URL } from '../../constants';
+import { API_URL } from "../../constants";
 
 export default function Supplementary() {
   const [Supplementaries, setSupplementaries] = useState([]);
   let history = useHistory();
-  const [value, setValue] = React.useState("saha");
+  const [value, setValue] = React.useState("all");
   const options = [
+    { value: "all", label: "All" },
     { value: "saha", label: "Saha" },
     { value: "social", label: "Social" },
     { value: "science", label: "Science" },
     { value: "human", label: "Human" },
   ];
-  const tokenString = sessionStorage.getItem("token");
-  const userToken = JSON.parse(tokenString);
+
+  const userToken = JSON.parse(sessionStorage.getItem("token"));
 
   useEffect(async () => {
     const res = await axios({
       method: "get",
-      url: `${API_URL}/reviews/recommend/`,
+      url: `${API_URL}/supplementary/all`,
       params: {
-        user_id: 1,
         category: value,
-        max_results: 3,
       },
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -34,8 +33,8 @@ export default function Supplementary() {
       responseType: "json",
     });
 
-    console.log(res.data.recommendations);
-    setSupplementaries(res.data.recommendations);
+    console.log(res.data);
+    setSupplementaries(res.data);
   }, [value]);
 
   const [show, setShow] = useState(false);
@@ -59,8 +58,6 @@ export default function Supplementary() {
           <h4 style={{ color: "red" }}> Warning : DO NOT SHARE </h4>
         </Col>
       </Row>
-
-      {/* <p>{value}</p> */}
 
       <Row className="justify-content-md-center mt-3">
         <Col md="auto">
@@ -92,22 +89,23 @@ export default function Supplementary() {
         <table className="table table-striped table-bordered">
           <thead>
             <tr>
+              <th>Subject ID</th>
               <th>Subject</th>
               <th>Supplementary</th>
-              <th>Author</th>
-              <th>Create</th>
               <th>Category</th>
             </tr>
           </thead>
           <tbody>
             {Supplementaries &&
-              Supplementaries.map((supplementary) => (
+              Supplementaries.filter(
+                (supplementary) => value == 'all' || supplementary.subject.category == value
+              ).map((supplementary) => (
+                // Supplementaries.map((supplementary) => (
                 <tr key={supplementary.id}>
-                  <td>{supplementary.subject}</td>
-                  <td>{supplementary.body}</td>
-                  <td>{supplementary.author}</td>
-                  <td>{supplementary.createdAt}</td>
-                  <td>{supplementary.category}</td>
+                  <td>{supplementary.subject_id}</td>
+                  <td>{supplementary.subject.short_name}</td>
+                  <td>{supplementary.url}</td>
+                  <td>{supplementary.subject.category}</td>
                 </tr>
               ))}
           </tbody>

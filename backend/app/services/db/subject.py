@@ -14,13 +14,13 @@ def get_subject_by_id(db: Session, id: int):
 
 
 def get_subject_by_short_name(db: Session, short_name: str, order_by=models.Subject.id):
-    return base.get_all_by_key_value_ordered(db=db, model=models.Subject,
+    return base.get_all_by_key_value(db=db, model=models.Subject,
                                              key=models.Subject.short_name, value=short_name,
                                              order_by=order_by)
 
 
 def get_subject_by_category(category: models.SubjectCategory, db: Session, order_by=models.Subject.id):
-    return base.get_all_by_key_value_ordered(db=db, model=models.Subject,
+    return base.get_all_by_key_value(db=db, model=models.Subject,
                                              key=models.Subject.category, value=category,
                                              order_by=order_by)
 
@@ -34,11 +34,11 @@ def is_subject_exist(db: Session, subject: schemas.SubjectCreate):
     if base.get_first_by_key_value(db, model=models.Subject, key=models.Subject.id, value=subject.id):
         return "Subject with this id is already exists"
     # short name
-    if base.get_first_by_key_value(db, model=models.Subject, key=models.Subject.id, value=subject.id):
-        return "Subject with this id is already exists"
+    if base.get_first_by_key_value(db, model=models.Subject, key=models.Subject.short_name, value=subject.short_name):
+        return "Subject with this short name is already exists"
     # fullname
-    if base.get_first_by_key_value(db, model=models.Subject, key=models.Subject.id, value=subject.id):
-        return "Subject with this id is already exists"
+    if base.get_first_by_key_value(db, model=models.Subject, key=models.Subject.full_name, value=subject.full_name):
+        return "Subject with this full name is already exists"
 
 
 def create_subject(db: Session, subject: schemas.SubjectCreate):

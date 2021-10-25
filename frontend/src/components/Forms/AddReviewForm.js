@@ -1,12 +1,6 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import React, { useState } from "react";
-
-const options = [
-  { value: "saha", label: "Saha" },
-  { value: "social", label: "Social" },
-  { value: "science", label: "Science" },
-  { value: "human", label: "Human" },
-];
+import { SUBJECT_CATEGORY_OPTIONS as options } from "../../constants"
 
 export default function AddReviewForm({ onSubmit, form }) {
   const [ins, setIns] = useState("");

@@ -1,4 +1,4 @@
-from app.models.Subject import SubjectCategory
+from app.models.Instructor import Department
 from sqlalchemy.sql.sqltypes import DateTime
 from pydantic import BaseModel, validator, constr
 from typing import List
@@ -9,32 +9,26 @@ import string
 from app.schemas.User import User
 
 
-class SubjectBase(BaseModel):
-    id: constr(regex=r'[0-9]{7}') = "2110222"
+class InstructorBase(BaseModel):
     short_name: str
-    full_name: str
-    category: SubjectCategory
+    first_name: str
+    last_name: str
+    department: Department
     
     @validator('short_name')
     def must_be_upper(cls, v):
         return v.upper()
     
-    @validator('full_name')
+    @validator('first_name', 'last_name')
     def must_be_capital(cls, v):
         return string.capwords(v)
     
-    @validator('id')
-    def subject_must_exist(cls, v):
-        if len(v) != 7:
-            raise ValueError('subject id is not valid(7 Integer).')
-        return v
-    
     class Config:
-    
+        
         orm_mode = True
 
 
-class SubjectReviewBase(BaseModel):
+class InstructorReviewBase(BaseModel):
     rating: float = 4.5
     content: str = 'Description'
     
@@ -45,23 +39,17 @@ class SubjectReviewBase(BaseModel):
         return v
 
 
-class SubjectReviewCreate(SubjectReviewBase):
+class InstructorReviewCreate(InstructorReviewBase):
     author_id: Optional[int]
-    subject_id: str = "2110221"
+    instructor_id: int
     created_at: Optional[datetime] = datetime.utcnow()
+
+
+class InstructorReview(InstructorReviewBase):
     
-    @validator('subject_id')
-    def subject_must_exist(cls, v):
-        if len(v) != 7:
-            raise ValueError('subject id is not valid(7 Integer).')
-        return v
-
-
-class SubjectReview(SubjectReviewBase):
-
     id: int
     author: User
-    subject: SubjectBase
+    instructor: InstructorBase
     updated_at: datetime
 
     class Config:
@@ -69,7 +57,7 @@ class SubjectReview(SubjectReviewBase):
         orm_mode = True
 
 
-class SubjectReviewWithoutSubject(SubjectReviewBase):
+class InstructorReviewWithoutInstructor(InstructorReviewBase):
     
     id: int
     author: User
@@ -80,13 +68,14 @@ class SubjectReviewWithoutSubject(SubjectReviewBase):
         orm_mode = True
 
 
-class SubjectCreate(SubjectBase):
+class InstructorCreate(InstructorBase):
     pass
 
 
-class Subject(SubjectBase):
+class Instructor(InstructorBase):
 
-    is_exist: bool
+    id: int
+    full_name: str
     average_rating: float = 0
     rating_count: int
 
@@ -95,9 +84,9 @@ class Subject(SubjectBase):
         orm_mode = True
 
 
-class SubjectWithReviews(Subject):
+class InstructorWithReviews(Instructor):
 
-    reviews: List[SubjectReviewWithoutSubject]
+    reviews: List[InstructorReviewWithoutInstructor]
 
     class Config:
 

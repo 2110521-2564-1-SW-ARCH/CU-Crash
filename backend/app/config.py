@@ -37,6 +37,14 @@ class SQL_CONFIG(BaseSettings):
         env_prefix = 'sql_'
 
 
+class MONGO_CONFIG(BaseSettings):
+    uri: str
+
+    class Config:
+        env_file = "app/.env"
+        env_prefix = 'mongo_'
+
+
 class API_KEY_CONFIG(BaseSettings):
     key: str = Field(..., env='api_key')
     name: str = Field(..., env='api_key_name')
@@ -59,6 +67,7 @@ class Config():
     SQL = SQL_CONFIG().dict()
     API_KEY = API_KEY_CONFIG().dict()
     TOKEN = TOKEN_CONFIG().dict()
+    MONGO = MONGO_CONFIG().dict()
 
 
 CONFIG = lru_cache()(Config)()
