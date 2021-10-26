@@ -31,7 +31,7 @@ def get_instructor_by_category(category: models.Department, db: Session, order_b
 
 
 def get_instructors(db: Session, skip: int = 0, limit: int = 100, order_by = None):
-    return base.get_all(db=db, model=models.Instructor,skip=skip, limit=limit, order_by = order_by)
+    return base.get_all(db=db, model=models.Instructor,skip=skip, limit=limit, order_by = models.Instructor.department)
 
 
 def is_instructor_exist(db: Session, instructor: schemas.InstructorCreate):

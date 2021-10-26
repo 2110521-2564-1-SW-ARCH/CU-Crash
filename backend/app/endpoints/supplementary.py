@@ -66,7 +66,7 @@ def create_supplementary(subject_id: constr(regex=r'[0-9]{7}'), url: AnyUrl,
 @router.get("/all", response_model=List[dict])
 def get_all(current_user: schemas.User = Depends(
             dependencies.get_current_active_user),
-            db = Depends(get_db)):
+            db=Depends(get_db)):
     client = MongoClient(CONFIG.MONGO['uri'], tlsCAFile=certifi.where())
     mongo = client['cucrash']
     result = list(mongo.supplementary.find())
@@ -74,5 +74,5 @@ def get_all(current_user: schemas.User = Depends(
         item['_id'] = str(item['_id'])
         item['subject'] = subject_services.get_subject_by_id(
             db=db, id=item['subject_id'])
-    logger.info(f'result: {result}')
+    # logger.info(f'result: {result}')
     return result

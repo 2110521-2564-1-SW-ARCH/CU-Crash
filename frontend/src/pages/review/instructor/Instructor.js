@@ -2,68 +2,77 @@ import { Button, Row, Col, Form, Modal } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import AddReviewForm from "../../../components/Forms/AddReviewForm";
-import { API_URL } from '../../../constants';
+import AddInstructorReviewForm from "../../../components/Forms/AddInstructorReviewForm";
+import {
+  API_URL,
+  INSTRUCTOR_CATEGORY_OPTIONS as options,
+} from "../../../constants";
+import ReviewCardINS from "../../../components/review/ReviewCardINS";
 
 export default function Instructor() {
-  const [Reviews, setReviews] = useState([]);
-  const [value, setValue] = useState("all");
-  const [sort, setSort] = useState("ascending");
-  
   let history = useHistory();
+  const [show, setShow] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [value, setValue] = React.useState("all");
+  const [search,setSearch] =useState('')
 
-  const options = [
-    { value: "all", label: "All" },
-    { value: "saha", label: "Saha" },
-    { value: "social", label: "Social" },
-    { value: "science", label: "Science" },
-    { value: "human", label: "Human" },
-  ];
+  const userToken = JSON.parse(sessionStorage.getItem("token"));
 
-  const sorts = [
-    { value: "ascending", label: "Ascending" },
-    { value: "descending", label: "Descending" },
-  ];
+  // async function getRecommend() {
+  //   const res = await axios({
+  //     method: "get",
+  //     url: `${API_URL}/reviews/recommend/`,
+  //     params: {
+  //       user_id: 1,
+  //       category: value,
+  //       max_results: 3,
+  //     },
+  //     headers: {
+  //       Authorization: `Bearer ${userToken}`,
+  //     },
+  //     responseType: "json",
+  //   });
+  //   return res
+  // };
 
-  const tokenString = sessionStorage.getItem("token");
-  const userToken = JSON.parse(tokenString);
+  // useEffect(() => {
+  //   try {
+  //     const res = getRecommend();
+  //     setReviews(res.data.recommendations);
+  //     console.log(res.data.recommendations);
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }, [value]);
 
-  async function getRecommend() {
+  // const [instructor,setInstructor] = useState([]);
+  useEffect(async () => {
     const res = await axios({
       method: "get",
-      url: `${API_URL}/reviews/recommend/`,
+      url:
+        value == "all"
+          ? `${API_URL}/review/instructor_review/all`
+          : `${API_URL}/review/instructor_review/get_by_department`,
       params: {
-        user_id: 1,
-        category: value,
-        max_results: 3,
+        department: value,
       },
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
       responseType: "json",
     });
-    return res
-  };
+    setReviews(res.data);
+    console.log(res.data);
+  }, [value, show]);
 
-  useEffect(() => {
-    try {
-      const res = getRecommend();
-      setReviews(res.data.recommendations);
-      console.log(res.data.recommendations);
-    } catch (e) {
-      console.log(e)
-    }
-  }, [value]);
 
-  const [show, setShow] = useState(false);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    handleClose();
-  };
+  // const onFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   handleClose();
+  // };
 
   return (
     <div className="container">
@@ -91,14 +100,21 @@ export default function Instructor() {
         <Col md="auto">
           <Form.Group className="mb-3" controlId="formBasicSearch">
             <Form.Control
-              placeholder="Search"
+              placeholder="instructor name"
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
           </Form.Group>
         </Col>
 
         <Col md="auto">
-          <Button>Search</Button>
+          <Button onClick={() => setShow(true)}>Add review</Button>
         </Col>
+        {/* <Col md="auto">
+          <Button>Search</Button>
+        </Col> */}
 
         {/* <Col md="auto">
           <select
@@ -115,14 +131,12 @@ export default function Instructor() {
         </Col> */}
       </Row>
 
-      <Row className="justify-content-md-center mt-1">
-        <Col md="auto">
-          <Button onClick={() => setShow(true)}>Add review</Button>
-        </Col>
+      <Row className="justify-content-md-center mt-3">
+      {reviews && reviews.filter((review) => review.instructor.full_name.toLowerCase().includes(search)).map((review) => <ReviewCardINS review={review} />)}
       </Row>
 
-      <Row className="justify-content-md-center mt-3">
-        <table className="table table-striped table-bordered">
+      {/* <Row className="justify-content-md-center mt-3"> */}
+        {/* <table className="table table-striped table-bordered">
           <thead>
             <tr>
               <th>Instructor</th>
@@ -146,22 +160,32 @@ export default function Instructor() {
                 </tr>
               ))}
           </tbody>
-        </table>
-      </Row>
+        </table> */}
+      {/* </Row> */}
 
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Add instructor review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AddReviewForm onSubmit={onFormSubmit} form="instructor"/>
+        </Modal.Body> */}
+
+        <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add instructor review</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddInstructorReviewForm setShow={setShow} />
         </Modal.Body>
+      </Modal>
+
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer> */}
-      </Modal>
+      {/* </Modal> */}
 
       {/* <Row className="justify-content-md-center mt-3">
           <Col md="auto">

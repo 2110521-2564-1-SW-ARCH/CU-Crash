@@ -14,6 +14,7 @@ export default function Subject() {
   const [show, setShow] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [value, setValue] = React.useState("all");
+  const [search,setSearch] =useState('')
 
   // const [sort, setSort] = React.useState("ascending");
 
@@ -33,6 +34,7 @@ export default function Subject() {
   // ];
   const userToken = JSON.parse(sessionStorage.getItem("token"));
 
+
   useEffect(async () => {
     const res = await axios({
       method: "get",
@@ -49,8 +51,8 @@ export default function Subject() {
       responseType: "json",
     });
     setReviews(res.data);
-    console.log(res.data);
-  }, [value]);
+    console.log(res.data[0].subject.short_name);
+  }, [value, show]);
 
   return (
     <div className="container">
@@ -75,23 +77,28 @@ export default function Subject() {
 
         <Col md="auto">
           <Form.Group className="mb-3" controlId="formBasicSearch">
-            <Form.Control placeholder="Search" />
+            <Form.Control
+              placeholder="subject name or no."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
           </Form.Group>
         </Col>
 
         <Col md="auto">
-          <Button>Search</Button>
-        </Col>
-      </Row>
-
-      <Row className="justify-content-md-center mt-1">
-        <Col md="auto">
           <Button onClick={() => setShow(true)}>Add review</Button>
         </Col>
+
+        {/* <Col md="auto">
+          <Button >Search</Button>
+        </Col> */}
       </Row>
 
+{/* .filter((review) => review.subject.shortname.toLowerCase().includes(search)) */}
       <Row className="justify-content-md-center mt-3">
-        {reviews && reviews.map((review) => <ReviewCard review={review} />)}
+        {reviews && reviews.filter((review) => review.subject.short_name.toLowerCase().includes(search)||review.subject.id.toLowerCase().includes(search)).map((review) => <ReviewCard review={review} />)}
       </Row>
 
       <Modal show={show} onHide={() => setShow(false)}>
@@ -99,7 +106,7 @@ export default function Subject() {
           <Modal.Title>Add subject review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddSubjectReviewForm />
+          <AddSubjectReviewForm setShow={setShow} />
         </Modal.Body>
       </Modal>
     </div>

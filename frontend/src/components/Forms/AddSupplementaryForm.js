@@ -4,7 +4,7 @@ import { API_URL } from "../../constants"
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-export default function AddSubjectReviewForm({setShow}) {
+export default function AddSupplementaryForm({setShow}) {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
   let history = useHistory();
   const [review, setReview] = useState({
@@ -22,7 +22,7 @@ export default function AddSubjectReviewForm({setShow}) {
     };
     setShow(false)
     const res = await axios.post(
-      `${API_URL}/review/subject_review/create`,
+      `${API_URL}/review//supplementary/create`,
       review,
       config,
     );

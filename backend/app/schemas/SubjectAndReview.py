@@ -40,8 +40,8 @@ class SubjectReviewBase(BaseModel):
     
     @validator('rating')
     def rating_should_betwee_zero_five(cls, v):
-        if v < 0 and v > 5:
-            raise ValueError('rating should between 0-5 ')
+        if v < 0 and v > 10:
+            raise ValueError('rating should between 0-10 ')
         return v
 
 

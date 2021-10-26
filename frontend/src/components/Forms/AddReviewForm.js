@@ -2,6 +2,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import React, { useState } from "react";
 import { SUBJECT_CATEGORY_OPTIONS as options } from "../../constants"
 
+// THIS FILE IS UNUSED, DELETE THIS FILE
 export default function AddReviewForm({ onSubmit, form }) {
   const [ins, setIns] = useState("");
   const [title, setTitle] = useState("");

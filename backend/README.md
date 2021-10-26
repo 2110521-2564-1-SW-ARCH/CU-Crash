@@ -21,6 +21,11 @@ poetry run start_grpc
 docker run -d --name some-rabbit -p 5672:5672 -p 8080:15672 rabbitmq:3-management
 ```
 
+## run RabbitMq reciever
+```
+py .\backend\app\ex_rabbitmq\Admin.py
+```
+
 ## Install db driver
 If error:
     Data source name not found and no default driver specified (0) (SQLDriverConnect)')

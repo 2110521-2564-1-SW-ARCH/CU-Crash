@@ -34,8 +34,8 @@ class InstructorReviewBase(BaseModel):
     
     @validator('rating')
     def rating_should_betwee_zero_five(cls, v):
-        if v < 0 and v > 5:
-            raise ValueError('rating should between 0-5 ')
+        if v < 0 and v > 10:
+            raise ValueError('rating should between 0-10 ')
         return v
 
 
@@ -43,18 +43,6 @@ class InstructorReviewCreate(InstructorReviewBase):
     author_id: Optional[int]
     instructor_id: int
     created_at: Optional[datetime] = datetime.utcnow()
-
-
-class InstructorReview(InstructorReviewBase):
-    
-    id: int
-    author: User
-    instructor: InstructorBase
-    updated_at: datetime
-
-    class Config:
-
-        orm_mode = True
 
 
 class InstructorReviewWithoutInstructor(InstructorReviewBase):
@@ -87,6 +75,18 @@ class Instructor(InstructorBase):
 class InstructorWithReviews(Instructor):
 
     reviews: List[InstructorReviewWithoutInstructor]
+
+    class Config:
+
+        orm_mode = True
+
+
+class InstructorReview(InstructorReviewBase):
+    
+    id: int
+    author: User
+    instructor: Instructor
+    updated_at: datetime
 
     class Config:
 

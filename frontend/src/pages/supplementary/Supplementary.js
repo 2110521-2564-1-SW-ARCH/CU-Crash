@@ -1,22 +1,20 @@
 import { Button, Row, Col, Form, Modal } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import AddSupplementaryForm from "../../components/AddSupplementaryForm";
 import axios from "axios";
-import { API_URL } from "../../constants";
+import {
+  API_URL,
+  SUBJECT_CATEGORY_OPTIONS as options,
+} from "../../constants";
 
 export default function Supplementary() {
-  const [Supplementaries, setSupplementaries] = useState([]);
   let history = useHistory();
+  const [show, setShow] = useState(false);
+  const [Supplementaries, setSupplementaries] = useState([]);
   const [value, setValue] = React.useState("all");
-  const options = [
-    { value: "all", label: "All" },
-    { value: "saha", label: "Saha" },
-    { value: "social", label: "Social" },
-    { value: "science", label: "Science" },
-    { value: "human", label: "Human" },
-  ];
+  const [search,setSearch] =useState('')
+
 
   const userToken = JSON.parse(sessionStorage.getItem("token"));
 
@@ -35,9 +33,9 @@ export default function Supplementary() {
 
     console.log(res.data);
     setSupplementaries(res.data);
-  }, [value]);
+  }, [value, show]);
 
-  const [show, setShow] = useState(false);
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -75,14 +73,24 @@ export default function Supplementary() {
         </Col>
 
         <Col md="auto">
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control placeholder="Search" />
+          <Form.Group className="mb-3" controlId="formBasicSearch">
+            <Form.Control
+              placeholder="subject name or no."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
           </Form.Group>
         </Col>
 
         <Col md="auto">
-          <Button>Search</Button>
+          <Button onClick={() => setShow(true)}>Add supplementary</Button>
         </Col>
+
+        {/* <Col md="auto">
+          <Button>Search</Button>
+        </Col> */}
       </Row>
 
       <Row className="justify-content-md-center mt-3">
@@ -98,12 +106,13 @@ export default function Supplementary() {
           <tbody>
             {Supplementaries &&
               Supplementaries.filter(
-                (supplementary) => value == 'all' || supplementary.subject.category == value
+                (supplementary) => (value == 'all' || supplementary.subject.category == value) && (supplementary.subject.short_name.toLowerCase().includes(search)||supplementary.subject.id.toLowerCase().includes(search))
               ).map((supplementary) => (
                 // Supplementaries.map((supplementary) => (
                 <tr key={supplementary.id}>
                   <td>{supplementary.subject_id}</td>
                   <td>{supplementary.subject.short_name}</td>
+                  {/* <td><Link to={`${supplementary.url}`}><div>{supplementary.url}</div></td> */}
                   <td>{supplementary.url}</td>
                   <td>{supplementary.subject.category}</td>
                 </tr>
@@ -112,19 +121,23 @@ export default function Supplementary() {
         </table>
       </Row>
 
-      <Row className="justify-content-md-center mt-3">
-        <Col md="auto">
-          <Button onClick={handleShow}>Add supplementary</Button>
-        </Col>
-      </Row>
+      {/* <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add supplementary</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AddSpplementaryForm setShow={setShow} />
+        </Modal.Body>
+      </Modal> */}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Add subject review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AddSupplementaryForm onSubmit={onCreateReviewFormSubmit} />
+          <AddSupplementaryForm onSubmit={onCreateReviewFormSubmit} setShow={setShow}/>
         </Modal.Body>
+
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

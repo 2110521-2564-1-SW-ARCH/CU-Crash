@@ -49,7 +49,8 @@ def add_data(db: Session, model_data):
         db.add(model_data)
         db.commit()
         db.refresh(model_data)
-    except:
+    except Exception as e:
+        logger.info(f"mongo error: { repr(e) } ")
         raise HTTPException(
             status_code=427,
             detail="Cannot create to database.",

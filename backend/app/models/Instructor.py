@@ -37,7 +37,7 @@ class Instructor(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
-    short_name = Column(String(20), unique=True)
+    short_name = Column(String(20))
     first_name = Column(String(100,collation="Thai_CI_AS"), unique=True) #collation ภาษาไทย
     last_name = Column(String(100,collation="Thai_CI_AS"), unique=True) #collation ภาษาไทย
     department = Column(Enum(Department))
