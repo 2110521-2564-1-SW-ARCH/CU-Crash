@@ -113,7 +113,7 @@ export default function Supplementary() {
                   <td>{supplementary.subject_id}</td>
                   <td>{supplementary.subject.short_name}</td>
                   {/* <td><Link to={`${supplementary.url}`}><div>{supplementary.url}</div></td> */}
-                  <td>{supplementary.url}</td>
+                  <a href={supplementary.url}>{supplementary.url}</a>
                   <td>{supplementary.subject.category}</td>
                 </tr>
               ))}

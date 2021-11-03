@@ -22,3 +22,7 @@ class User(UserBase):
     class Config:
 
         orm_mode = True
+
+class UserChangePassword(BaseModel):
+    password: str = 'pwd1234'
+    new_password: str = 'pwd4567'

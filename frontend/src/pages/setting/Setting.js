@@ -71,7 +71,7 @@ export default function Setting() {
           <Modal.Title>Update profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ChangeNameForm onSubmit={onChangeNameFormSubmit} />
+          <ChangeNameForm  />
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

@@ -16,14 +16,38 @@ cd backend
 poetry run start_grpc
 ```
 
-## run RabbitMq container
+## run RabbitMq and kong container
 ```
-docker run -d --name some-rabbit -p 5672:5672 -p 8080:15672 rabbitmq:3-management
+cd backend
+docker-compose up
+```
+
+## stop and start RabbitMq and kong container after run
+```
+cd backend
+docker-compose stop
+
+docker-compose start
 ```
 
 ## run RabbitMq reciever
 ```
 py .\backend\app\ex_rabbitmq\Admin.py
+```
+
+## Kong setup
+```
+service:
+    name: backend-service
+    protocol: http
+    host: 192.168.0.112
+    port: 5567
+
+route:
+    name: backend-route
+    path: /backend
+    protocols: http
+    method: GET, POST
 ```
 
 ## Install db driver

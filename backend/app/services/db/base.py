@@ -56,3 +56,16 @@ def add_data(db: Session, model_data):
             detail="Cannot create to database.",
         )
     return model_data
+
+def update_name(db: Session, model, key, id,name):
+    db_user = get_first_by_key_value(db, model, key, id)
+    db_user.name = name
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def update_pwd(db: Session, model, key, db_user, newHashPwd):
+    db_user.hashed_password = newHashPwd
+    db.commit()
+    db.refresh(db_user)
+    return db_user

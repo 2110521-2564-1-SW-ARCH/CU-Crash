@@ -63,11 +63,22 @@ class TOKEN_CONFIG(BaseSettings):
         env_file = "app/.env"
         env_prefix = 'token_'
 
+
+class EMAIL_CONFIG(BaseSettings):
+    name: str
+    password: str
+    
+    class Config:
+        env_file = "app/.env"
+        env_prefix = 'email_'
+
+
 class Config():
     SQL = SQL_CONFIG().dict()
     API_KEY = API_KEY_CONFIG().dict()
     TOKEN = TOKEN_CONFIG().dict()
     MONGO = MONGO_CONFIG().dict()
+    EMAIL = EMAIL_CONFIG().dict()
 
 
 CONFIG = lru_cache()(Config)()

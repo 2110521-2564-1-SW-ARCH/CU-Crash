@@ -3,29 +3,45 @@ import React, { useState, useEffect } from "react";
 import { API_URL } from "../../constants";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import SelectSearch, { fuzzySearch } from 'react-select-search';
+import SelectSearch, { fuzzySearch } from "react-select-search";
+
+const options = [
+  {
+    "name": "Kawin Dhanakoses",
+    "value":17,
+},
+{
+    "name": "Pittayawat Pittayaporn",
+    "value":15,
+},
+];
 export default function AddInstructorReviewForm({ setShow }) {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
   let history = useHistory();
-  const [value,setValue] = useState('')
+  const [value, setValue] = useState("");
   const [review, setReview] = useState({
     subject_id: "",
     rating: 0,
     content: "",
   });
-  const [instructor,setInstructor] = useState([]);
+  const [instructor, setInstructor] = useState([]);
   useEffect(async () => {
     const res = await axios({
       method: "get",
-      url:
-        `${API_URL}/instructor/all`,
+      url: `${API_URL}/instructor/all`,
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
       responseType: "json",
     });
-    setInstructor(res.data)
-    console.log(res.data);
+    // test = res.data
+    setInstructor(res.data);
+    // console.log(res.data);
+    // console.log(options)
+    // res.data.map(data => console.log(data))
+    console.log(instructor)
+    // res.data.map(data => setInstructor())
+
   }, []);
 
   const handleSubmit = async () => {
@@ -71,6 +87,7 @@ export default function AddInstructorReviewForm({ setShow }) {
           filterOptions={fuzzySearch}
           placeholder="Search something"
         /> */}
+        
       </Form.Group>
 
       <Form.Group

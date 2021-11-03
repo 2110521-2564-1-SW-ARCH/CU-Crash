@@ -3,8 +3,14 @@ import { useHistory } from "react-router-dom";
 
 export default function CustomNavbar() {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
-  const username = JSON.parse(sessionStorage.getItem("user-info")).username;
+  const username = JSON.parse(sessionStorage.getItem("user-info"))?.username;
   const history = useHistory();
+
+  function getToken() {
+    const tokenString = sessionStorage.getItem("token");
+    const userToken = JSON.parse(tokenString);
+    return userToken;
+  }
 
   const onLogout = () => {
     let isLogout = true;
@@ -26,7 +32,7 @@ export default function CustomNavbar() {
   };
 
   return (
-    <Navbar bg="light" expand="lg" sticky="top">
+    <Navbar bg="light" expand="lg" sticky="top" hidden={getToken() == null}>
       <Container>
         <Navbar.Brand href="/home">CU-CRASH</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -57,5 +63,5 @@ export default function CustomNavbar() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  );
+  )
 }

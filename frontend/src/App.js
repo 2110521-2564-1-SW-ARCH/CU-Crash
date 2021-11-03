@@ -8,9 +8,8 @@ import Subject from "./pages/review/subject/Subject";
 import Instructors from "./pages/review/instructor/Instructor";
 import Supplementary from "./pages/supplementary/Supplementary";
 import Setting from "./pages/setting/Setting";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import React, { useState } from "react";
-
 import "./App.css";
 
 function setToken(userToken) {
@@ -24,46 +23,52 @@ function setProfile(user){
 function getToken() {
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
-  return userToken?.token;
+  return userToken;
+}
+
+function PrivateRoute(prop) {
+  return getToken() != null
+    ? <Route path={prop.path}>
+        {prop.children}
+      </Route>
+    : <Redirect to="/login" push />
 }
 
 export default function App() {
-  const token = getToken();
-  // const [token, setToken] = useState();
-  // if(!token){
-  //     return <Login setToken={setToken} />
-  // }
+
   return (
     <PageContainer>
       <Router>
         <Switch>
+
+          {/* private route */}
+          <PrivateRoute path="/home">
+            <Home />
+          </PrivateRoute>
+          <PrivateRoute path="/reviews/subject">
+            <Subject />
+          </PrivateRoute>
+          <PrivateRoute path="/reviews/instructor">
+            <Instructors />
+          </PrivateRoute>
+          <PrivateRoute path="/supplementaries">
+            <Supplementary />
+          </PrivateRoute>
+          <PrivateRoute path="/settings">
+            <Setting />
+          </PrivateRoute>
+          <PrivateRoute path="/dashboard">
+            <Dashboard />
+          </PrivateRoute>
+
+          {/* public route */}
           <Route path="/register">
             <Register />
           </Route>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/reviews/subject">
-            <Subject />
-          </Route>
-          <Route path="/reviews/instructor">
-            <Instructors />
-          </Route>
-          <Route path="/supplementaries">
-            <Supplementary />
-          </Route>
-          <Route path="/settings">
-            <Setting />
-          </Route>
-          <Route path="/login">
+          <Route path={["/login", "/"]}>
             <Login setToken={setToken} setProfile={setProfile}/>
           </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/">
-            <Login setToken={setToken} setProfile={setProfile}/>
-          </Route>
+
         </Switch>
       </Router>
     </PageContainer>

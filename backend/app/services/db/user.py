@@ -27,6 +27,11 @@ def create_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(**user.dict(exclude={'password'}), hashed_password=passwd)
     return base.add_data(db=db, model_data=db_user)
 
+def change_user_name(db: Session, id, name):
+    return base.update_name(db= db, model=models.User, key= models.User.id, id = id, name=name)
+    
+def change_user_pwd(db: Session, db_user, newHashPwd):
+  return base.update_pwd(db= db, model=models.User, key= models.User.id, db_user = db_user, newHashPwd= newHashPwd)
 
 '''def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db_item = models.Item(**item.dict(), owner_id=user_id)
