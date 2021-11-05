@@ -62,7 +62,7 @@ export default function Instructor() {
       responseType: "json",
     });
     setReviews(res.data);
-    console.log(res.data);
+    // console.log(res.data);
   }, [value, show]);
 
 

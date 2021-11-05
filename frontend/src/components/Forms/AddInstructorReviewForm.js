@@ -5,16 +5,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import SelectSearch, { fuzzySearch } from "react-select-search";
 
-const options = [
-  {
-    "name": "Kawin Dhanakoses",
-    "value":17,
-},
-{
-    "name": "Pittayawat Pittayaporn",
-    "value":15,
-},
-];
+
 export default function AddInstructorReviewForm({ setShow }) {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
   let history = useHistory();
@@ -24,7 +15,7 @@ export default function AddInstructorReviewForm({ setShow }) {
     rating: 0,
     content: "",
   });
-  const [instructor, setInstructor] = useState([]);
+  const [instructors, setInstructors] = useState([]);
   useEffect(async () => {
     const res = await axios({
       method: "get",
@@ -33,18 +24,24 @@ export default function AddInstructorReviewForm({ setShow }) {
         Authorization: `Bearer ${userToken}`,
       },
       responseType: "json",
-    });
-    // test = res.data
-    setInstructor(res.data);
-    // console.log(res.data);
-    // console.log(options)
-    // res.data.map(data => console.log(data))
-    console.log(instructor)
-    // res.data.map(data => setInstructor())
-
+    })
+    .then((res) =>{
+        const data = res.data;
+        data.forEach(instructor => {
+          setInstructors((prevItems) => [
+            ...prevItems,
+            {
+              name: instructor.full_name,
+              value: instructor.id,
+            },
+          ]);
+          console.log(instructor.id)
+        });
+    })
   }, []);
 
   const handleSubmit = async () => {
+    // setReview({ ...review, instructor_id: value })
     const config = {
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -64,30 +61,24 @@ export default function AddInstructorReviewForm({ setShow }) {
     }
   };
 
+  useEffect(()=>{
+      setReview({ ...review, instructor_id: value })
+  },[value])
   return (
     <Form>
       <Form.Group
         className="justify-content-md-center"
         controlId="ControlTextarea"
       >
-        <Form.Label>Instructor ID</Form.Label>
-        <Form.Control
-          type="textarea"
-          placeholder="Instructor"
-          value={review.instructor_id}
-          onChange={(e) =>
-            setReview({ ...review, instructor_id: e.target.value })
-          }
-        />
-        {/* <SelectSearch
-          options={options}
+        <Form.Label>Instructor name</Form.Label>
+        <SelectSearch
+          options={instructors}
           value={value}
           onChange={setValue}
           search
           filterOptions={fuzzySearch}
-          placeholder="Search something"
-        /> */}
-        
+          placeholder="Instructor"
+        />
       </Form.Group>
 
       <Form.Group

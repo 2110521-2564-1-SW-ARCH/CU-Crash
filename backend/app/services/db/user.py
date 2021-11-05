@@ -25,6 +25,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     logger.info(f"Creating user to DB: {user}")
     passwd = bcrypt.hashpw(user.password.encode('utf8'), bcrypt.gensalt())
     db_user = models.User(**user.dict(exclude={'password'}), hashed_password=passwd)
+    db_user.is_active = False
     return base.add_data(db=db, model_data=db_user)
 
 def change_user_name(db: Session, id, name):
@@ -32,6 +33,9 @@ def change_user_name(db: Session, id, name):
     
 def change_user_pwd(db: Session, db_user, newHashPwd):
   return base.update_pwd(db= db, model=models.User, key= models.User.id, db_user = db_user, newHashPwd= newHashPwd)
+
+def verify_email(db: Session, id):
+    return base.user_active(db= db, model=models.User, key= models.User.id, id= id)
 
 '''def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db_item = models.Item(**item.dict(), owner_id=user_id)

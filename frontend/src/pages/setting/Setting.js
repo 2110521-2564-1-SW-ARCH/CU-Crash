@@ -7,33 +7,32 @@ import ChangeNameForm from "../../components/changeNameForm";
 import axios from "axios";
 import { API_URL } from '../../constants';
 
-export default function Setting() {
+export default function Setting({ setToken, setProfile }) {
   const [Reviews, setReviews] = useState([]);
   let history = useHistory();
   const [value, setValue] = React.useState("saha");
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
-
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
-  useEffect(async () => {
-    const res = await axios({
-      method: "get",
-      url: `${API_URL}/reviews/recommend/`,
-      params: {
-        user_id: 1,
-        category: value,
-        max_results: 3,
-      },
-      headers: {
-        Authorization: `Bearer ${userToken}`,
-      },
-      responseType: "json",
-    });
+  // useEffect(async () => {
+  //   const res = await axios({
+  //     method: "get",
+  //     url: `${API_URL}/reviews/recommend/`,
+  //     params: {
+  //       user_id: 1,
+  //       category: value,
+  //       max_results: 3,
+  //     },
+  //     headers: {
+  //       Authorization: `Bearer ${userToken}`,
+  //     },
+  //     responseType: "json",
+  //   });
 
-    console.log(res.data.recommendations);
-    setReviews(res.data.recommendations);
-  }, [value]);
+  //   console.log(res.data.recommendations);
+  //   setReviews(res.data.recommendations);
+  // }, [value]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -53,6 +52,16 @@ export default function Setting() {
 
   return (
     <div className="container">
+       <Row className="justify-content-md-center mt-5">
+        <Col md="auto">
+          <img
+            width="200"
+            height="200"
+            src="https://cdn-icons.flaticon.com/png/512/807/premium/807390.png?token=exp=1636128826~hmac=d438f0c4abb1969dfccae72687de292f"
+          />
+        </Col>
+      </Row>
+
       <Row className="justify-content-md-center mt-5">
         <h3 className="p-3 text-center">Settings</h3>
       </Row>
@@ -71,7 +80,7 @@ export default function Setting() {
           <Modal.Title>Update profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ChangeNameForm  />
+          <ChangeNameForm  setToken={setToken} setProfile={setProfile}/>
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

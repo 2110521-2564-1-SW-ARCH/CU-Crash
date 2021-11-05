@@ -20,6 +20,7 @@ function setProfile(user){
   sessionStorage.setItem("user-info", JSON.stringify(user));
 }
 
+
 function getToken() {
   const tokenString = sessionStorage.getItem("token");
   const userToken = JSON.parse(tokenString);
@@ -55,7 +56,7 @@ export default function App() {
             <Supplementary />
           </PrivateRoute>
           <PrivateRoute path="/settings">
-            <Setting />
+            <Setting setToken={setToken} setProfile={setProfile}/>
           </PrivateRoute>
           <PrivateRoute path="/dashboard">
             <Dashboard />

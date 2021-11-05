@@ -73,7 +73,7 @@ def jwt_token(data: dict):
     return access_token
 
 
-async def get_current_user(db: Session = Depends(get_db), token: str = Security(oauth2_scheme)):
+def get_current_user(db: Session = Depends(get_db), token: str = Security(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -83,7 +83,7 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
         payload = jwt.decode(token, CONFIG.TOKEN['secret_key'],
                              algorithms=[CONFIG.TOKEN['algorithm']])
     except jwt.exceptions.DecodeError:
-        logger.info('cannot get payload.')
+        logger.info(f'cannot get payload. from token: {token}')
         raise credentials_exception
     except jwt.exceptions.ExpiredSignatureError:
         logger.info('token has expired.')
@@ -94,10 +94,12 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
         )
     email: str = payload.get("email")
     if email is None:
+        logger.info('User with this email not found.')
         raise credentials_exception
     token_data = TokenData(username=email)
     user = user_services.get_user_by_email(db, email=token_data.username)
     if user is None:
+        logger.info('User is None')
         raise credentials_exception
     return user
 

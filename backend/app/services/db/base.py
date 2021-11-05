@@ -69,3 +69,10 @@ def update_pwd(db: Session, model, key, db_user, newHashPwd):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def user_active(db: Session,model, key, id):
+    db_user = get_first_by_key_value(db, model, key, id)
+    db_user.is_active = True
+    db.commit()
+    db.refresh(db_user)
+    return db_user

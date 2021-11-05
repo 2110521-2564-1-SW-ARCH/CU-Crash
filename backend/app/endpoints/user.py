@@ -5,7 +5,7 @@ import bcrypt
 
 from app.services.db.sql_connection import get_db
 from app.services.db import user as user_services
-from app.services import send_email, check_password
+from app.services import send_comfirmation_email, check_password
 from fastapi.security import OAuth2PasswordRequestForm
 from app import models, schemas, dependencies
 from app.dependencies import jwt_token
@@ -28,6 +28,10 @@ async def create(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if db_user:
         logger.info(f'email {user.email} is already in use.')
         raise HTTPException(status_code=400, detail="Email already registered")
+    user_dict = {'email': schemas.User(**user.__dict__).dict()['email']}
+    logging.info(f'Registering for: {user_dict}')
+    token = jwt_token(user_dict)
+    send_comfirmation_email(user.email, user.name, token)
     return user_services.create_user(db, user)
 
 
@@ -40,50 +44,61 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(),
     )
     logger.info(f"User Login: {user}")
     db_user = user_services.get_user_by_email(db, email=user.email)
-    if db_user:
-        passwd = user.password.encode('utf8')
-        hashed_password = db_user.hashed_password.encode('utf8')
-        matched = bcrypt.checkpw(passwd, hashed_password)
-        if matched:
-            access_token = jwt_token(schemas.User(**db_user.__dict__).dict())
-            res = {"access_token": access_token,
-                    "user":{
-                    "user_id": db_user.id,
-                    "username": db_user.name,
-                    "email": db_user.email}}
-            logger.info(f"User Login success: {res}")
-            return res
-        logger.info(f"User Login failed.")
-    raise HTTPException(status_code=401, detail="Incorrect email or password")
+    matched = check_password(user, db_user)
+    if matched and db_user.is_active:
+        access_token = jwt_token(schemas.User(**db_user.__dict__).dict())
+        res = {"access_token": access_token,
+               "user": {
+                   "user_id": db_user.id,
+                   "username": db_user.name,
+                   "email": db_user.email}}
+        logger.info(f"User Login success: {res}")
+        return res
+    raise HTTPException(status_code=427, detail="Please verify your email.")
 
 
 @router.put("/change/name")
 async def changeName(name: str, current_user: schemas.User = Depends(
-                            dependencies.get_current_active_user),
-                            db: Session = Depends(get_db)):
+        dependencies.get_current_active_user),
+        db: Session = Depends(get_db)):
     user = user_services.change_user_name(db, id=current_user.id, name=name)
-    raise HTTPException(status_code=200, detail="name change successful, Your name is "+user.name)
+    user_dict = schemas.User(**user.__dict__).dict()
+    logging.info(f'Change username success : {user_dict}')
+    access_token = jwt_token(user_dict)
+    logging.info(f'token: {access_token}')
+    return {'access_token': access_token,
+            'detail': "name change successful, Your name is "+user.name,
+            'user': user_dict}
 
 
 @router.put("/change/password")
 async def changePassword(password: schemas.UserChangePassword, current_user: schemas.User = Depends(
-                            dependencies.get_current_active_user),
-                            db: Session = Depends(get_db)):
-    # check_password(db,)
+        dependencies.get_current_active_user),
+        db: Session = Depends(get_db)):
     db_user = user_services.get_user_by_id(db, user_id=current_user.id)
-    if db_user:
-        passwd = password.password.encode('utf8')
-        hashed_password = db_user.hashed_password.encode('utf8')
-        matched = bcrypt.checkpw(passwd, hashed_password)
-        if matched:
-            newHashPwd = bcrypt.hashpw(password.new_password.encode('utf8'), bcrypt.gensalt())
-            user_services.change_user_pwd(db, db_user, newHashPwd)
-            logger.info(f"Change password success")
-            raise HTTPException(status_code=200, detail="Change password success")
-    raise HTTPException(status_code=401, detail="Incorrect email or password")
+    matched = check_password(password, db_user)
+    if matched:
+        newHashPwd = bcrypt.hashpw(
+            password.new_password.encode('utf8'), bcrypt.gensalt())
+        user_services.change_user_pwd(db, db_user, newHashPwd)
+        logger.info(f"Change password success")
+        return {'detail': "Change password success"}
 
 
 @router.post("/send_email")
-async def sending_email(reciever: str):
-    send_email(sending_email)
+async def sending_email(reciever: str, username: str):
+    user_dict = {'email': reciever}
+    logging.info(f'Registering for: {reciever}')
+    token = jwt_token(user_dict)
+    send_comfirmation_email(reciever, username, token)
     return 200
+
+
+@router.get("/confirm_email")
+async def confirm_email(token: str, db: Session = Depends(get_db)):
+    user = dependencies.get_current_user(db, token)
+    logger.info(user)
+    user_dict = schemas.User(**user.__dict__).dict()
+    logger.info(user_dict)
+    user_services.verify_email(db, user_dict['id'])
+    return f"email confirmation for {user_dict['name']} successfully"
