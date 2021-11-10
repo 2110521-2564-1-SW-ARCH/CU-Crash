@@ -26,3 +26,7 @@ class User(UserBase):
 class UserChangePassword(BaseModel):
     password: str = 'pwd1234'
     new_password: str = 'pwd4567'
+
+class UserResetPassword(BaseModel):
+    new_password: str = 'pwd1234'
+    identifier: str

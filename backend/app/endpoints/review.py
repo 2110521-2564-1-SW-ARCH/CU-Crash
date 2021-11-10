@@ -87,7 +87,7 @@ async def create_instructor_review(review: schemas.InstructorReviewCreate,
         )
     review.author_id = current_user.id
     result = instructor_review_services.create_review(db=db, review=review)
-    rabbit_sent(review=review)
+    # rabbit_sent(review=review)
     return review
 
 

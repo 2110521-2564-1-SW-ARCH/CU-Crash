@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { API_URL } from "../../constants"
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import SelectSearch, { fuzzySearch } from "react-select-search";
 
 export default function AddSupplementaryForm({setShow}) {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
@@ -12,8 +13,12 @@ export default function AddSupplementaryForm({setShow}) {
     rating: 0,
     content: "",
   });
+  const [subjectData, setSubjectData] = useState([])
+  const [value, setValue] = useState("");
 
   const handleSubmit = async () => {
+    const x = review
+    x.subject_id = value
     const config = {
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -23,7 +28,7 @@ export default function AddSupplementaryForm({setShow}) {
     setShow(false)
     const res = await axios.post(
       `${API_URL}/review//supplementary/create`,
-      review,
+      x,
       config,
     );
     if (res?.status == 200) {
@@ -35,6 +40,30 @@ export default function AddSupplementaryForm({setShow}) {
     
   };
 
+
+  useEffect(async () => {
+    console.log(`work!`)
+    const res = await axios({
+      method: "get",
+      url: `${API_URL}/subject/all`,
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      responseType: "json",
+    });
+
+    if (res?.status == 200) {
+      console.log(`res -> ${JSON.stringify(res.data)}`);
+      const subject_title = res.data.map(subject => {
+        return {
+          name: `${subject.id}   ${subject.short_name}`,
+          value: subject.id
+        }
+      });  
+      setSubjectData(subject_title);
+    }
+  }, []);
+
   return (
     <Form>
         <Form.Group
@@ -42,13 +71,22 @@ export default function AddSupplementaryForm({setShow}) {
           controlId="ControlTextarea"
         >
           <Form.Label>Subject ID</Form.Label>
-          <Form.Control
+          {/* <Form.Control
             type="textarea"
             placeholder="Subject"
             value={review.subject_id}
             onChange={(e) => setReview({...review, "subject_id": e.target.value})}
+          /> */}
+          <SelectSearch
+            options={subjectData}
+            value={value}
+            onChange={setValue}
+            search
+            filterOptions={fuzzySearch}
+            placeholder="subject"
           />
         </Form.Group>
+        {/* </Form.Group> */}
 
       <Form.Group
         className="justify-content-md-center mt-3"

@@ -1,8 +1,9 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API_URL } from "../../constants"
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import SelectSearch, { fuzzySearch } from "react-select-search";
 
 export default function AddSubjectReviewForm({setShow}) {
   const userToken = JSON.parse(sessionStorage.getItem("token"));
@@ -12,8 +13,15 @@ export default function AddSubjectReviewForm({setShow}) {
     rating: 0,
     content: "",
   });
+  const [subjectData, setSubjectData] = useState([])
+  const [value, setValue] = useState("");
 
+  // const do = (e) => {
+  //   setValuerev
+  // }
   const handleSubmit = async () => {
+    const x = review
+    x.subject_id = value
     const config = {
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -23,7 +31,7 @@ export default function AddSubjectReviewForm({setShow}) {
     setShow(false)
     const res = await axios.post(
       `${API_URL}/review/subject_review/create`,
-      review,
+      x,
       config,
     );
     if (res?.status == 200) {
@@ -35,19 +43,55 @@ export default function AddSubjectReviewForm({setShow}) {
     
   };
 
+  console.log(subjectData)
+  useEffect(async () => {
+    console.log(`work!`)
+    const res = await axios({
+      method: "get",
+      url: `${API_URL}/subject/all`,
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      responseType: "json",
+    });
+
+    if (res?.status == 200) {
+      console.log(`res -> ${JSON.stringify(res.data)}`);
+      const subject_title = res.data.map(subject => {
+        return {
+          name: `${subject.id}   ${subject.short_name}`,
+          value: subject.id
+        }
+      });  
+      setSubjectData(subject_title);
+    }
+  }, []);
+
+  const tmp = () => {
+
+  }
   return (
     <Form>
         <Form.Group
           className="justify-content-md-center"
           controlId="ControlTextarea"
         >
-          <Form.Label>Subject ID</Form.Label>
-          <Form.Control
+          <Form.Label>Subject</Form.Label>
+          {/* <Form.Control
             type="textarea"
             placeholder="Subject"
             value={review.subject_id}
             onChange={(e) => setReview({...review, "subject_id": e.target.value})}
-          />
+          /> */}
+
+        <SelectSearch
+          options={subjectData}
+          value={value}
+          onChange={setValue}
+          search
+          filterOptions={fuzzySearch}
+          placeholder="subject"
+        />
         </Form.Group>
 
       <Form.Group

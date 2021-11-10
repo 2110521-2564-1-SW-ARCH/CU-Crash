@@ -2,6 +2,7 @@ import PageContainer from "./components/common/PageContainer";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
+import ResetPassword from "./pages/resetPassword/ResetPassword";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Home from "./pages/home/Home";
 import Subject from "./pages/review/subject/Subject";
@@ -66,10 +67,16 @@ export default function App() {
           <Route path="/register">
             <Register />
           </Route>
+          <Route path="/forgot">
+            <ForgotPassword />
+          </Route>
+          <Route path="/reset_password">
+            <ResetPassword />
+          </Route>
           <Route path={["/login", "/"]}>
             <Login setToken={setToken} setProfile={setProfile}/>
           </Route>
-
+          
         </Switch>
       </Router>
     </PageContainer>

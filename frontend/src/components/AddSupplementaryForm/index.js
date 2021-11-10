@@ -1,8 +1,9 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { API_URL } from "../../constants"
 import axios from "axios";
+import SelectSearch, { fuzzySearch } from "react-select-search";
 
 const options = [
   { value: "saha", label: "Saha" },
@@ -19,6 +20,8 @@ export default function AddReviewForm({ onSubmit, form,setShow }) {
   let year = newDate.getFullYear();
   let currentDate = `${date}-${month < 10 ? `0${month}` : `${month}`}-${year}`;
 
+  const [subjectData, setSubjectData] = useState([])
+  const [value, setValue] = useState("");
   const [supplementary, setSupplementary] = useState({
     subject_id: "",
     url: "",
@@ -36,7 +39,7 @@ export default function AddReviewForm({ onSubmit, form,setShow }) {
         method: "post",
         url: `${API_URL}/supplementary/create`,
         params: {
-          subject_id: supplementary.subject_id,
+          subject_id: value,
           url:supplementary.url,
         },
         headers: {
@@ -57,21 +60,54 @@ export default function AddReviewForm({ onSubmit, form,setShow }) {
       console.log("Sent Supplementary Fail");
     }
   };
+
+  useEffect(async () => {
+    console.log(`work!`)
+    const res = await axios({
+      method: "get",
+      url: `${API_URL}/subject/all`,
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      responseType: "json",
+    });
+
+    if (res?.status == 200) {
+      console.log(`res -> ${JSON.stringify(res.data)}`);
+      const subject_title = res.data.map(subject => {
+        return {
+          name: `${subject.id}   ${subject.short_name}`,
+          value: subject.id
+        }
+      });  
+      setSubjectData(subject_title);
+    }
+  }, []);
+
   return (
     <Form onSubmit={onSubmit}>
       <Form.Group
         className="justify-content-md-center"
         controlId="ControlTextarea"
       >
-        <Form.Label>Subject ID</Form.Label>
-        <Form.Control
+        <Form.Label>Subject</Form.Label>
+        {/* <Form.Control
           type="textarea"
           placeholder="Subject ID"
           value={supplementary.subject_id}
           onChange={(e) =>
             setSupplementary({ ...supplementary, subject_id: e.target.value })
           }
-        />
+        /> */}
+                 <SelectSearch
+            options={subjectData}
+            value={value}
+            onChange={setValue}
+            search
+            filterOptions={fuzzySearch}
+            placeholder="subject"
+          />
+        
       </Form.Group>
 
       <Form.Group controlId="exampleForm.ControlTextarea1">

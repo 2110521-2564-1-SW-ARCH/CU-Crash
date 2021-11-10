@@ -55,9 +55,10 @@ export default function Setting({ setToken, setProfile }) {
        <Row className="justify-content-md-center mt-5">
         <Col md="auto">
           <img
-            width="200"
-            height="200"
-            src="https://cdn-icons.flaticon.com/png/512/807/premium/807390.png?token=exp=1636128826~hmac=d438f0c4abb1969dfccae72687de292f"
+            width="250"
+            height="250"
+            // src="https://cdn-icons.flaticon.com/png/512/807/premium/807390.png?token=exp=1636128826~hmac=d438f0c4abb1969dfccae72687de292f"
+            src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/512/Settings-icon.png"
           />
         </Col>
       </Row>

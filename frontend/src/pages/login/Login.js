@@ -82,6 +82,11 @@ export default function Login({ setToken, setProfile }) {
               Register
             </Button>
           </Col>
+          <Col md="auto">
+            <a href="/forgot">
+              Forgot password
+            </a>
+          </Col>
         </Row>
       </Container>
     </>

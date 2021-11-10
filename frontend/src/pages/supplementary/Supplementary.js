@@ -132,7 +132,7 @@ export default function Supplementary() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add subject review</Modal.Title>
+          <Modal.Title>Add supplementary</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AddSupplementaryForm onSubmit={onCreateReviewFormSubmit} setShow={setShow}/>

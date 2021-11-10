@@ -4,21 +4,27 @@ import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import { API_URL } from '../../constants';
 
-export default function ForgotPassword() {
-    const [email, setEmail] = useState('');
+export default function ResetPassword() {
     const [password, setPassword] = useState('');
+    const queryParams = new URLSearchParams(window.location.search);
     let history = useHistory();
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('email => '+email);
-        const res = await axios({
-            method: 'get',
-            url:`${API_URL}/user/forgot_password?email=${email}`, 
-        });
-        // console.log(res.data.access_token)
-        // alert("Send email complete")
-        // history.push('/login')
-
+        const data = {
+            'identifier': queryParams.get('identifier'),
+            'new_password': password
+        }
+        console.log('param => ' + queryParams.get('identifier'));
+        const res = await axios.put(
+            `${API_URL}/user/reset_password`,
+            data,
+        );
+        console.log(res)
+        history.push("/login")
+    //     // console.log(res.data.access_token)
+    //     // alert("Send email complete")
+    //     // history.push('/login')
     }
 
     return (
@@ -28,7 +34,7 @@ export default function ForgotPassword() {
                     <Col md="auto">
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <h1 className="font-weight-bold">
-                                Forgot Password
+                                Enter your new Password
                             </h1>
                         </Form.Group>
                     </Col>
@@ -36,20 +42,22 @@ export default function ForgotPassword() {
 
                 <Row className="justify-content-md-center mt-3">
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>New password</Form.Label>
                         <Form.Control
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </Form.Group>
                 </Row>
 
                 <Row className="justify-content-md-center mt-3">
                     <Col md="auto">
-                        <Button variant="primary" size="lg" type="submit" onClick={handleSubmit}>
-                            Send
+                        <Button variant="primary" size="lg"
+                        onClick={handleSubmit}
+                        >
+                            Next
                         </Button>
                     </Col>
                 </Row>
